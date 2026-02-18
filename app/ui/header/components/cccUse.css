@@ -1,0 +1,71 @@
+.fontHeader1,
+.fontHeader1 * {
+	font-weight: 500;
+	font-size: 24px;
+	line-height: normal;
+	letter-spacing: 3.4px;
+}
+
+.fontHeader2,
+.fontHeader2 * {
+	font-weight: 900;
+	font-size: 48px;
+	line-height: normal;
+	letter-spacing: 2.4px;
+}
+
+.fontHeader3,
+.fontHeader3 * {
+	font-weight: 500;
+	font-size: 24px;
+	line-height: normal;
+	letter-spacing: 0px;
+}
+
+.fontHeader4,
+.fontHeader4 * {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 22px;
+	letter-spacing: 0px;
+}
+
+.fontHeader5,
+.fontHeader5 * {
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 22px;
+	letter-spacing: 0px;
+}
+
+.fontFooter1,
+.fontFooter1 * {
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 20px;
+	letter-spacing: 0.3px;
+}
+
+.fontFooter2,
+.fontFooter2 * {
+	font-weight: 400;
+	font-size: 10px;
+	line-height: 15px;
+	letter-spacing: 0.2px;
+}
+
+.fontFooter3,
+.fontFooter3 * {
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 20px;
+	letter-spacing: 0.2px;
+}
+
+.fontFooter4,
+.fontFooter4 * {
+	font-weight: 700;
+	font-size: 12px;
+	line-height: 20px;
+	letter-spacing: 0.2px;
+}

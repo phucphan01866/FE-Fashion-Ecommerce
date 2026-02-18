@@ -1,0 +1,10 @@
+export const navButtonClass = "px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-md transition-all duration-100 ease-in-out";
+export const navButtonClass2 = "p-2 text-gray-700 hover:bg-gray-200 rounded-full transition-all duration-100 ease-in-out";
+export const dividerClass = "border border-gray-100 w-[0px] h-[20px] transition-all duration-100 ease-in-out";
+export const dropdownClassLeft = "absolute left-0 top-full z-500 transition-all duration-100 ease-in-out";
+export const dropdownClassRight = "absolute top-full right-0 z-500 transition-all min-w-full duration-100 ease-in-out";
+export const dropdownClassCenter = "absolute top-full left-1/2 translate-x-[-50%] z-500 transition-all duration-100 ease-in-out";
+export const dropdownMenuClass = "bg-white shadow-md drop-shadow-md mt-2 px-2 py-2 rounded-md w-[150%] whitespace-nowrap w-fit transition-all duration-100 ease-in-out";
+export const dropdownMenuClass2 = "bg-white flex flex-col gap-2 shadow-md drop-shadow-md mt-2 px-2 py-2 rounded-[16px] transition-all duration-100 ease-in-out";
+export const itemClass = "block mt-1 px-4 py-2 hover:bg-gray-200 rounded-sm transition-all duration-100 ease-in-out"
+export const itemClass2 = "w-full flex items-center gap-3 mt-1 px-4 py-2 hover:bg-gray-200 rounded-lg hover:cursor-pointer transition-all duration-100 ease-in-out"
