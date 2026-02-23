@@ -6,20 +6,23 @@ import { TypeProduct } from "@/service/product.service";
 import { useAuth } from "@/context/AuthContext";
 import { useFavorite } from "@/context/FavoriteContext";
 
-export default function ProductListHorizontal({ products, itemOption = "medium" }: { products: TypeProduct[], itemOption?: "small" | "medium" | "large" }) {
+export default function HorizontalProductsList({ products, itemOption = "medium", isLoading = false }: { products: TypeProduct[], itemOption?: "small" | "medium" | "large", isLoading?: boolean }) {
     const dragScrollRef = useDragScroll();
     const { user } = useAuth();
     const { favoriteIdsList } = useFavorite();
+    const default_products_count = 5;
     return (
         <div
             className={`gap-6 overflow-hidden flex select-none backdrop-opacity-50`}
             ref={dragScrollRef}
         >
-            {products.map((product) => {
+            {!isLoading ? products.map((product) => {
                 return (
                     <Product key={product.id} data={product} itemOption={itemOption} isCustomer={user?.role === 'customer'} isFavored={favoriteIdsList.includes(product.id)}></Product>
                 );
-            })}
+            }) : Array.from({ length: default_products_count }).map((_, index) => (
+                <Product data={null} key={index} itemOption={itemOption} isLoading={true} />
+            ))}
         </div>
     );
 }

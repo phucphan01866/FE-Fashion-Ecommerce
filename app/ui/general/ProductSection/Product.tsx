@@ -8,6 +8,8 @@ import { TypeProduct } from "@/service/product.service";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
 import { useCart } from "@/context/CartContext";
 import { useFavorite } from "@/context/FavoriteContext";
+import ImageSkeleton from "../skeletons/ImageSkeleton";
+import TextSleleton from "../skeletons/TextSkeleton";
 
 interface ProductProps {
     imageSrc: string;
@@ -23,6 +25,7 @@ export default function Product({
     optionalImgUrl = "",
     isFavored = false,
     customID,
+    isLoading = false,
 }: {
     data: any,
     itemOption?: "small" | "medium" | "large" | 'fill',
@@ -30,19 +33,23 @@ export default function Product({
     optionalImgUrl?: string,
     isFavored?: boolean,
     customID?: string,
+    isLoading?: boolean,
 }) {
     const iconSize = 20;
-    const url = `/product/${customID || data.id}`;
-    let image: string;
+    const url = !isLoading ? `/product/${customID || data.id}` : "#";
+    let image: string = "";
     if (optionalImgUrl && optionalImgUrl !== "") {
         image = optionalImgUrl;
     } else {
-        image =
+        !isLoading ? (
             data.product_images && data.product_images.length > 0
                 ? (typeof data.product_images[0] === 'string'
                     ? data.product_images[0]
                     : data.product_images[0]?.url ?? "/123")
-                : "/321";
+                : ("/321")
+        ) : (
+            image = "/placeholder.png"
+        )
     }
     // const image = typeof data.product_images[0] === 'string' ? data.product_images[0] : "/";
     // const image = "/placeholeder.jpg";
@@ -87,27 +94,40 @@ export default function Product({
                     height: "auto"
                 }}
             >
-                <Image src={image}
-                    fill
-                    alt=""
-                    className={`d-block object-cover rounded-md transition-transform duration-500 ease-out group-hover:scale-110 hover:!scale-110 `}></Image>
+                {!isLoading ? (
+                    <Image src={image}
+                        fill
+                        alt=""
+                        className={`d-block object-cover rounded-md transition-transform duration-500 ease-out group-hover:scale-110 hover:!scale-110 `}></Image>
+
+                ) : (<ImageSkeleton />)}
             </Link>
             <div className={`mt-1 p-1 truncate grid grid-cols-[1fr_auto] font-medium gap-y-2 ${isCustomer ? "gap-x-2" : ""}`}
                 style={{ maxWidth: imgSize?.width + "px" }}>
                 <Link href={`${url}`} className={`[user-drag:none] [-webkit-user-drag:none] truncate
                     ${itemOption === "small" ? "col-span-2" : ""}`}>
                     <h2 className={`col-start-1 truncate capitalize ${isCustomer ? "max-w-[22ch]" : ""}`}>
-                        {data.name}
+                        {!isLoading ? (
+                            data.name
+                        ) : (
+                            <TextSleleton />
+                        )}
                     </h2>
                 </Link>
-                <p className={`col-start-1
+                {
+                    !isLoading ? (
+                        <p className={`col-start-1
                     ${itemOption === "small" ? "h-fit self-end" : ""}`}>
-                    <span className={`${data.is_flash_sale ? 'fotnA4 !font-normal line-through' : 'fontA3 !font-semibold'}`}>
-                        {Number(data.price).toLocaleString('vi-VN')}₫</span>
-                    {data.is_flash_sale && (
-                        <span className="fontA3 ml-3 !font-semibold">{data.final_price.toLocaleString('vi-VN')}₫</span>
-                    )}
-                </p>
+                            <span className={`${data.is_flash_sale ? 'fotnA4 !font-normal line-through' : 'fontA3 !font-semibold'}`}>
+                                {Number(data.price).toLocaleString('vi-VN')}₫</span>
+                            {data.is_flash_sale && (
+                                <span className="fontA3 ml-3 !font-semibold">{data.final_price.toLocaleString('vi-VN')}₫</span>
+                            )}
+                        </p>
+                    ) : (
+                        <TextSleleton />
+                    )
+                }
                 {isCustomer && itemOption !== "small" && (
                     <button onClick={() => handleClick(data)} className={`add-to-cart-btn flex flex-col gap-2 justify-center col-start-2 rounded-full bg-orange-400 hover:bg-orange-400 hover:outline-2 hover:outline-orange-50 hover:scale-105 transition-all duration-300 ease-in-out 
                 text-2xl text-white leading-5 row-span-2 row-start-1 px-3 py-3`}>

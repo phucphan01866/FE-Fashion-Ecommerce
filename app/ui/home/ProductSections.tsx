@@ -12,11 +12,11 @@ import { TopBrandsSection } from "./TopBrandsSection";
 export default function ProductSections() {
     return (
         <div>
-            <ProductSection_Discounting />
-            <HomePromotion />
-            <TopBrandsSection />
+            {/* <ProductSection_Discounting /> */}
+            {/* <HomePromotion /> */}
+            {/* <TopBrandsSection /> */}
             <ProductSection_NewProduct />
-            <ProductSection_Categories />
+            {/* <ProductSection_Categories /> */}
         </div>
     )
 

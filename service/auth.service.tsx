@@ -1,6 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
-import { ogFetch } from '@/utils/authIntercept';
+// import { ogFetch } from '@/utils/authIntercept';
 import Cookies from 'js-cookie';
 
 export interface User {
@@ -97,7 +97,8 @@ export const authService = {
     },
     async refresh(): Promise<{ accessToken: string }> {
         const refreshToken = Cookies.get('refreshToken');
-        const res = await ogFetch(`${API_URL}/api/refresh`, {
+        // const res = await ogFetch(`${API_URL}/api/refresh`, {
+        const res = await fetch(`${API_URL}/api/refresh`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refreshToken }),

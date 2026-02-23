@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import ProductListHorizontal from "@/app/ui/general/ProductSection/ProductListHorizontal";
+import HorizontalProductsList from "@/app/ui/general/ProductSection/ProductListHorizontal";
 import { useHome } from "@/context/HomeContext";
 import { productImage, TypeProduct } from "@/service/product.service";
 import BasicLoadingSkeleton from "../skeletons/LoadingSkeleton";
@@ -9,7 +9,7 @@ import Image from "next/image";
 import { usePublic } from "@/context/PublicContext";
 import Link from "next/link";
 
-export function ProductSection({ listProduct, listTab, title, bannerSrc, link, mode }: { listProduct?: TypeProduct[], listTab?: { label: string, products: TypeProduct[], id: string }[], title: string, bannerSrc?: string, link?: string, mode?: string }) {
+export function ProductSection({ listProduct, listTab, title, bannerSrc, link, mode, isLoading = false }: { listProduct?: TypeProduct[], listTab?: { label: string, products: TypeProduct[], id: string }[], title: string, bannerSrc?: string, link?: string, mode?: string, isLoading?: boolean }) {
     if (listTab && listTab.length > 0) return (
         <ProductSection_MultiTab
             listTab={[...(listTab || [])].sort((a, b) => (b.products?.length || 0) - (a.products?.length || 0))}
@@ -21,21 +21,21 @@ export function ProductSection({ listProduct, listTab, title, bannerSrc, link, m
     );
 
     if (listProduct && listProduct.length > 0) return (
-        <ProductSection_OneTab
+        <ProductSection_SingleTab
             listProduct={listProduct}
             title={title}
             bannerSrc={bannerSrc}
             link={link || undefined}
             mode={mode}
+            isLoading={isLoading}
         />
     );
-
 }
 
 const h1CSS = "after:content-[''] after:block after:w-1/2 hover:after:w-[100%] after:h-[3px] after:bg-[rgb(53,64,82)] after:mx-auto after:mt-2 after:transition-all after:duration-1000 font-bold text-3xl text-center w-fit m-auto relative uppercase";
 
 export
-    function ProductSection_OneTab({ listProduct, title, bannerSrc, link, mode }: { listProduct: TypeProduct[], title: string, bannerSrc?: string, link?: string, mode?: string }) {
+    function ProductSection_SingleTab({ listProduct, title, bannerSrc, link, mode, isLoading = false }: { listProduct: TypeProduct[], title: string, bannerSrc?: string, link?: string, mode?: string, isLoading?: boolean }) {
     return (
         <div className={`${mode === "highlight" ? "bg-gradient-to-b from-orange-400 to-orange-500 shadow-md" : "container"} `}>
             <div className={`
@@ -46,7 +46,7 @@ export
                 <h1
                     className={`${h1CSS} ${mode === "highlight" ? "text-white after:bg-white" : ""}`}
                 >{title}</h1>
-                <ProductListHorizontal products={listProduct} />
+                <HorizontalProductsList products={listProduct} isLoading={isLoading} />
                 {link && (
                     <Link
                         className={`mx-auto flex gap-1 hover:gap-3 px-3 py-2 rounded-full border-2 
@@ -88,7 +88,7 @@ export function ProductSection_MultiTab({ listTab, title, bannerSrc, link, mode 
             {listTab.map((tab, index) => {
                 if (tab.label !== selectedTab) return null;
                 return (
-                    <ProductListHorizontal
+                    <HorizontalProductsList
                         key={index}
                         products={tab.products} />
                 );
@@ -135,7 +135,7 @@ function TabList({ listTab, selectedTab, onTabSelect }: { listTab: string[], sel
 export function ProductSection_Discounting() {
     const { flashSaleProducts, isProductsLoading } = useHome();
     if (isProductsLoading) {
-        return <BasicLoadingSkeleton />;
+        <ProductSection listProduct={[]} title="Sản phẩm đang Flashsale" link="/product?is_flash_sale=true" mode="highlight" />
     }
     if (flashSaleProducts.items.length === 0) {
         return null;
@@ -148,13 +148,13 @@ export function ProductSection_Discounting() {
 export function ProductSection_NewProduct() {
     const { newsestProducts, isProductsLoading } = useHome();
     if (isProductsLoading) {
-        return <BasicLoadingSkeleton />;
+        return <ProductSection_SingleTab listProduct={[]} title="Sản phẩm mới ra mắt" isLoading={true} />;
     }
     if (newsestProducts.items.length === 0) {
         return null;
     }
     return (
-        <ProductSection listProduct={newsestProducts.items} title="Sản phẩm mới ra mắt" />
+        <ProductSection_SingleTab listProduct={newsestProducts.items} title="Sản phẩm mới ra mắt" />
     );
 }
 
