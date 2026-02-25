@@ -9,28 +9,28 @@ import Image from "next/image";
 import { usePublic } from "@/context/PublicContext";
 import Link from "next/link";
 
-export function ProductSection({ listProduct, listTab, title, bannerSrc, link, mode, isLoading = false }: { listProduct?: TypeProduct[], listTab?: { label: string, products: TypeProduct[], id: string }[], title: string, bannerSrc?: string, link?: string, mode?: string, isLoading?: boolean }) {
-    if (listTab && listTab.length > 0) return (
-        <ProductSection_MultiTab
-            listTab={[...(listTab || [])].sort((a, b) => (b.products?.length || 0) - (a.products?.length || 0))}
-            title={title}
-            bannerSrc={bannerSrc}
-            link={link || undefined}
-            mode={mode}
-        />
-    );
+// export function ProductSection({ listProduct, listTab, title, bannerSrc, link, mode, isLoading = false }: { listProduct?: TypeProduct[], listTab?: { label: string, products: TypeProduct[], id: string }[], title: string, bannerSrc?: string, link?: string, mode?: string, isLoading?: boolean }) {
+//     if (listTab && listTab.length > 0) return (
+//         <ProductSection_MultiTab
+//             listTab={[...(listTab || [])].sort((a, b) => (b.products?.length || 0) - (a.products?.length || 0))}
+//             title={title}
+//             bannerSrc={bannerSrc}
+//             link={link || undefined}
+//             mode={mode}
+//         />
+//     );
 
-    if (listProduct && listProduct.length > 0) return (
-        <ProductSection_SingleTab
-            listProduct={listProduct}
-            title={title}
-            bannerSrc={bannerSrc}
-            link={link || undefined}
-            mode={mode}
-            isLoading={isLoading}
-        />
-    );
-}
+//     if (listProduct && listProduct.length > 0) return (
+//         <ProductSection_SingleTab
+//             listProduct={listProduct}
+//             title={title}
+//             bannerSrc={bannerSrc}
+//             link={link || undefined}
+//             mode={mode}
+//             isLoading={isLoading}
+//         />
+//     );
+// }
 
 const h1CSS = "after:content-[''] after:block after:w-1/2 hover:after:w-[100%] after:h-[3px] after:bg-[rgb(53,64,82)] after:mx-auto after:mt-2 after:transition-all after:duration-1000 font-bold text-3xl text-center w-fit m-auto relative uppercase";
 
@@ -132,64 +132,19 @@ function TabList({ listTab, selectedTab, onTabSelect }: { listTab: string[], sel
     );
 }
 
-export function ProductSection_Discounting() {
-    const { flashSaleProducts, isProductsLoading } = useHome();
-    if (isProductsLoading) {
-        <ProductSection listProduct={[]} title="Sản phẩm đang Flashsale" link="/product?is_flash_sale=true" mode="highlight" />
-    }
-    if (flashSaleProducts.items.length === 0) {
-        return null;
-    }
-    return (
-        <ProductSection listProduct={flashSaleProducts.items} title="Sản phẩm đang Flashsale" link="/product?is_flash_sale=true" mode="highlight" />
-    );
-}
+// export function ProductSection_Discounting() {
+//     const { flashSaleProducts, isProductsLoading } = useHome();
+//     if (isProductsLoading) {
+//         <ProductSection listProduct={[]} title="Sản phẩm đang Flashsale" link="/product?is_flash_sale=true" mode="highlight" />
+//     }
+//     if (flashSaleProducts.items.length === 0) {
+//         return null;
+//     }
+//     return (
+//         <ProductSection listProduct={flashSaleProducts.items} title="Sản phẩm đang Flashsale" link="/product?is_flash_sale=true" mode="highlight" />
+//     );
+// }
 
-export function ProductSection_NewProduct() {
-    const { newsestProducts, isProductsLoading } = useHome();
-    if (isProductsLoading) {
-        return <ProductSection_SingleTab listProduct={[]} title="Sản phẩm mới ra mắt" isLoading={true} />;
-    }
-    if (newsestProducts.items.length === 0) {
-        return null;
-    }
-    return (
-        <ProductSection_SingleTab listProduct={newsestProducts.items} title="Sản phẩm mới ra mắt" />
-    );
-}
-
-export function ProductSection_Categories() {
-    const { categoriesProducts, isProductsLoading } = useHome();
-    const { publicData } = usePublic();
-    if (isProductsLoading) {
-        return <BasicLoadingSkeleton />;
-    } else return (
-        <>
-            {categoriesProducts.map((category) => {
-                if (category.children?.length === 0) return null;
-                const catData = publicData?.categories.find(cat => (cat.id === category.id));
-                const bannerSrc = catData?.image || '';
-                return (
-                    (
-                        <div key={category.id}>
-                            <ProductSection
-                                listTab={category.children?.map(children => ({
-                                    id: children.id,
-                                    label: children.name,
-                                    products: children.products || []
-                                }))}
-                                title={category.name}
-                                bannerSrc={bannerSrc}
-                                link={`/product?category_id=${encodeURI(category.id)}`}
-                            />
-                        </div>
-                    )
-                )
-            })
-            }
-        </>
-    );
-}
 
 function ProductSection_Banner({ bannerSrc }: { bannerSrc: string }) {
     return (

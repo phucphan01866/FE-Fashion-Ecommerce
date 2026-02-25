@@ -27,23 +27,24 @@ const HomeService = {
             method: 'GET',
         })
         const result3 = await response3.json();
-        const processedCategories = result3.categories.map((category: any) => ({
-            ...category,
-            children: category.children.map((child: any) => ({
-                ...child,
-                products: child.products.map((product: any) => ({
-                    ...product,
-                    product_images: product.product_images.map((img: { url: string }) => img.url),
-                    variants: product.variants.map((variant: any) => ({
-                        ...variant,
-                        product_images: variant.images.map((img: { url: string }) => img.url),
-                    })),
-                })),
-            })),
-        }));
-        console.log("r1 ", result1);
-        console.log("r3 ", result3);
-        const result = { flashSales: result1.flashSales, newest: result1.newest, categories: processedCategories };
+        // const processedCategories = result3.categories.map((category: any) => ({
+        //     ...category,
+        //     children: category.children.map((child: any) => ({
+        //         ...child,
+        //         products: child.products.map((product: any) => ({
+        //             ...product,
+        //             product_images: product.product_images.map((img: { url: string }) => img.url),
+        //             variants: product.variants.map((variant: any) => ({
+        //                 ...variant,
+        //                 product_images: variant.images.map((img: { url: string }) => img.url),
+        //             })),
+        //         })),
+        //     })),
+        // }));
+        // console.log("r1 ", result1);
+        console.log("pre-r3:, " ,result3);
+        // console.log("r3 ", processedCategories);
+        const result = { flashSales: result1.flashSales, newest: result1.newest, categories: result3.categories };
         // console.log("resule :", result);
         return result;
 

@@ -40,10 +40,10 @@ export default function BannerCarousel() {
                     );
                 })}
             </div>
-            <button className={`${arrowCSS} left-[3.5rem] `} onClick={goToPrev}>
-                <Image src="/icon/chevron_down.svg" alt="Arrow left" width={24} height={24} className="rotate-90" />
+            <button className={`${arrowCSS} ${bannerList.length===1 && 'opacity-50'} left-[3.5rem] `} onClick={goToPrev}>
+                <Image src="/icon/chevron_down.svg" alt="Arrow left" width={24} height={24} className={`rotate-90`} />
             </button>
-            <button className={`${arrowCSS} right-[3.5rem]`} onClick={goToNext}>
+            <button className={`${arrowCSS} ${bannerList.length===1 && 'opacity-50'} right-[3.5rem]`} onClick={goToNext}>
                 <Image src="/icon/chevron_down.svg" alt="Arrow left" width={24} height={24} className="rotate-270" />
             </button>
         </div >

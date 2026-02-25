@@ -48,21 +48,21 @@ function Left({ secondFirstRoute }: { secondFirstRoute: string }) {
   );
 }
 function Center() {
-  async function test() {
-    console.log("test");
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
-      method: 'POST',
-    });
-    const data = await res.json();
-    console.log(data);
-    } catch (error) {
-      console.table(error);
-    }
-  }
+  // async function test() {
+  //   console.log("test");
+  //   try {
+  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
+  //     method: 'POST',
+  //   });
+  //   const data = await res.json();
+  //   console.log(data);
+  //   } catch (error) {
+  //     console.table(error);
+  //   }
+  // }
   return (
     <div className={`${wrapperStyle}`}>
-      <button onClick={test}>Test</button>
+      {/* <button onClick={test}>Test</button> */}
     </div>
   );
 }

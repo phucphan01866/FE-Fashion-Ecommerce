@@ -31,7 +31,7 @@ function PageContent() {
     ]
     const { items, firstLoad } = useHomeProductPage();
     return (
-        <div className="bg-white min-h-screen">
+        <div className="bg-white min-h-screen mt-8">
             {/* <Breadcrumb breadcrumbItems={breadcrumbItems} /> */}
             <div className="container flex flex-col gap-4 w-full p-4 ">
                 <Breadcrumb breadcrumbItems={breadcrumbItems} />

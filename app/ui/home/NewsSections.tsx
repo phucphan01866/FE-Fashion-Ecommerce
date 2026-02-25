@@ -1,12 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { ProductSection_Discounting, ProductSection_NewProduct, ProductSection_Categories } from "../general/ProductSection/ProductSection";
-import { useHome } from "@/context/HomeContext";
-import BasicLoadingSkeleton from "../general/skeletons/LoadingSkeleton";
-import { ContentLoadingSkeleton } from "../general/skeletons/LoadingSkeleton";
 import { useDragScroll } from "@/hooks";
-import { useAuth } from "@/context/AuthContext";
 import { NewsPreviewData } from "@/service/news.service";
 import { useNews, NewsProvider } from "@/context/NewsContext";
 import Link from "next/link";

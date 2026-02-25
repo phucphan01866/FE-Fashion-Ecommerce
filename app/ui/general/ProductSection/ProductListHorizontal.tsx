@@ -6,7 +6,7 @@ import { TypeProduct } from "@/service/product.service";
 import { useAuth } from "@/context/AuthContext";
 import { useFavorite } from "@/context/FavoriteContext";
 
-export default function HorizontalProductsList({ products, itemOption = "medium", isLoading = false }: { products: TypeProduct[], itemOption?: "small" | "medium" | "large", isLoading?: boolean }) {
+export default function HorizontalProductsList({ products, isLoading = false }: { products: TypeProduct[], isLoading?: boolean }) {
     const dragScrollRef = useDragScroll();
     const { user } = useAuth();
     const { favoriteIdsList } = useFavorite();
@@ -18,10 +18,10 @@ export default function HorizontalProductsList({ products, itemOption = "medium"
         >
             {!isLoading ? products.map((product) => {
                 return (
-                    <Product key={product.id} data={product} itemOption={itemOption} isCustomer={user?.role === 'customer'} isFavored={favoriteIdsList.includes(product.id)}></Product>
+                    <Product key={product.id} data={product} isCustomer={user?.role === 'customer'} isFavored={favoriteIdsList.includes(product.id)}></Product>
                 );
             }) : Array.from({ length: default_products_count }).map((_, index) => (
-                <Product data={null} key={index} itemOption={itemOption} isLoading={true} />
+                <Product data={null} key={index} isLoading={true} />
             ))}
         </div>
     );

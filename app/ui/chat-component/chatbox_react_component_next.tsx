@@ -14,6 +14,7 @@ import { SpinLoadingSkeleton } from "../general/skeletons/LoadingSkeleton";
 import { useDebounce } from "@/hooks";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const API_ENDPOINT = `${API_URL}/gemini/chat`;
 
 interface ChatMessage {
   id: string;
@@ -68,7 +69,7 @@ interface selectedProd {
 }
 
 export default function ChatBox({
-  endpoint = `${API_URL}/api/ai/chat`,
+  endpoint = `${API_ENDPOINT}`,
   title = "Tư vấn Luna",
   placeholder = "VD: Tư vấn cho tôi bộ quần áo công sở, tôi thích màu trắng.",
   userId,
@@ -92,8 +93,14 @@ export default function ChatBox({
   const [fetchedProductList, setFetchedProductList] = useState<Map<string, FetchedProduct>>(new Map());
 
   useEffect(() => {
-    if (open && !sessionId) {
-      startChatSession();
+    if (open && messages.length === 0) {
+      const firstMsg: ChatMessage = {
+        id: "initial",
+        role: "assistant",
+        content: "Chào bạn! Mình có thể giúp gì cho bạn hôm nay?",
+        metadata: null,
+      }
+      setMessages(prev => [...prev, firstMsg]);
     } else if (open && sessionId) {
       scrollToBottom();
     }
@@ -110,103 +117,103 @@ export default function ChatBox({
     return () => { document.removeEventListener('mousedown', handleClickOutside) };
   }, [open]);
 
-  const startChatSession = async () => {
-    try {
-      let savedSessionId = localStorage.getItem("ai_chat_session_id");
-      if (localStorage.getItem("ai_chat_session_id") === undefined || localStorage.getItem("ai_chat_session_id") === "undefined") {
-        localStorage.removeItem("ai_chat_session_id");
-        savedSessionId = null;
-      }
-      // localStorage.removeItem("ai_chat_session_id");
-      console.log("Sử dụng sessionId: ", savedSessionId);
+  // const startChatSession = async () => {
+  //   try {
+  //     let savedSessionId = localStorage.getItem("ai_chat_session_id");
+  //     if (localStorage.getItem("ai_chat_session_id") === undefined || localStorage.getItem("ai_chat_session_id") === "undefined") {
+  //       localStorage.removeItem("ai_chat_session_id");
+  //       savedSessionId = null;
+  //     }
+  //     // localStorage.removeItem("ai_chat_session_id");
+  //     console.log("Sử dụng sessionId: ", savedSessionId);
 
-      const token = Cookies.get("accessToken");
-      const res = await fetch(`${endpoint}/start`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          session_id: savedSessionId || undefined,
-          loadMessages: true,
-          messagesLimit: pageSize,
-        }),
-      });
+  //     const token = Cookies.get("accessToken");
+  //     const res = await fetch(`${endpoint}/start`, {
+  //       method: "POST",
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`,
+  //       },
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         session_id: savedSessionId || undefined,
+  //         loadMessages: true,
+  //         messagesLimit: pageSize,
+  //       }),
+  //     });
 
-      const data = await res.json();
-      console.log("before restored: ", data);
+  //     const data = await res.json();
+  //     console.log("before restored: ", data);
 
-      if (data.success) {
-        console.log("Data response từ BE: ", data);
-        setSessionId(data.sessionId);
-        localStorage.setItem("ai_chat_session_id", data.sessionId);
-        setHasMore(data.hasMore || false);
-        setNextCursor(data.nextCursor || null);
+  //     if (data.success) {
+  //       console.log("Data response từ BE: ", data);
+  //       setSessionId(data.sessionId);
+  //       localStorage.setItem("ai_chat_session_id", data.sessionId);
+  //       setHasMore(data.hasMore || false);
+  //       setNextCursor(data.nextCursor || null);
 
-        // Khôi phục lịch sử tin nhắn cũ (restore)
-        if (data.messages && data.messages.length > 0) {
-          const restored: ChatMessage[] = data.messages.map((m: any) => {
-            const metadata = (m.metadata && m.metadata.size_suggestions && !m.metadata.outfits) ? {
-              ...m.metadata,
-              outfits: [{
-                items: m.metadata.size_suggestions.map((s: any) => (s.variant_id)),
-                size_suggestions: m.metadata.size_suggestions.map((s: any) => s.suggested_size),
-              }]
-            } : (m.metadata && m.metadata.selected) ? {
-              ...m.metadata,
-              items: [m.metadata.selected],
-            } : m.metadata;
-            const pre_content = (m.metadata && m.metadata.size_suggestions && !m.metadata.outfits) ? (() => {
-              const messageLines = m.content.split(". ");
-              return messageLines[0].split(": ")[0] + ":";
-            })() :
-              (m.metadata && m.metadata.selected) ? m.content
-                : undefined;
-            const content = (m.metadata && m.metadata.size_suggestions && !m.metadata.outfits) ? (() => {
-              const messageLines = m.content.split(". ");
-              return messageLines[messageLines.length - 1];
-            })() :
-              (m.metadata && m.metadata.selected) ? m.metadata.selected.description :
-                m.content;
-            return {
-              id: crypto.randomUUID(),
-              role: m.role,
-              pre_content: pre_content || null,
-              content: content,
-              created_at: m.created_at,
-              metadata: metadata || null,
-            }
-          });
-          setMessages(restored);
-          console.log("restored mgs: ", restored);
-          // Fetch sản phẩm cho tin nhắn cũ
-          const allIds = new Set<string>();
-          restored.forEach((msg, index) => {
-            msg.metadata?.outfits?.forEach(o => o.items.forEach(id => allIds.add(id)));
-            msg.metadata?.size_suggestions?.forEach(s => allIds.add(s.variant_id));
-          });
-          if (allIds.size > 0) {
-            fetchProductList(Array.from(allIds), "restore")
-          };
-        }
-      }
-    } catch (err) {
-      console.log("error resote: ", err);
-      setMessages([
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: "Oops! Mình đang bận thử đồ, bạn thử lại sau ít phút nha!",
-          metadata: null,
-        },
-      ]);
-    } finally {
-      // setLoadingMore(false);
-      setLoading(false);
-    }
-  };
+  //       // Khôi phục lịch sử tin nhắn cũ (restore)
+  //       if (data.messages && data.messages.length > 0) {
+  //         const restored: ChatMessage[] = data.messages.map((m: any) => {
+  //           const metadata = (m.metadata && m.metadata.size_suggestions && !m.metadata.outfits) ? {
+  //             ...m.metadata,
+  //             outfits: [{
+  //               items: m.metadata.size_suggestions.map((s: any) => (s.variant_id)),
+  //               size_suggestions: m.metadata.size_suggestions.map((s: any) => s.suggested_size),
+  //             }]
+  //           } : (m.metadata && m.metadata.selected) ? {
+  //             ...m.metadata,
+  //             items: [m.metadata.selected],
+  //           } : m.metadata;
+  //           const pre_content = (m.metadata && m.metadata.size_suggestions && !m.metadata.outfits) ? (() => {
+  //             const messageLines = m.content.split(". ");
+  //             return messageLines[0].split(": ")[0] + ":";
+  //           })() :
+  //             (m.metadata && m.metadata.selected) ? m.content
+  //               : undefined;
+  //           const content = (m.metadata && m.metadata.size_suggestions && !m.metadata.outfits) ? (() => {
+  //             const messageLines = m.content.split(". ");
+  //             return messageLines[messageLines.length - 1];
+  //           })() :
+  //             (m.metadata && m.metadata.selected) ? m.metadata.selected.description :
+  //               m.content;
+  //           return {
+  //             id: crypto.randomUUID(),
+  //             role: m.role,
+  //             pre_content: pre_content || null,
+  //             content: content,
+  //             created_at: m.created_at,
+  //             metadata: metadata || null,
+  //           }
+  //         });
+  //         setMessages(restored);
+  //         console.log("restored mgs: ", restored);
+  //         // Fetch sản phẩm cho tin nhắn cũ
+  //         const allIds = new Set<string>();
+  //         restored.forEach((msg, index) => {
+  //           msg.metadata?.outfits?.forEach(o => o.items.forEach(id => allIds.add(id)));
+  //           msg.metadata?.size_suggestions?.forEach(s => allIds.add(s.variant_id));
+  //         });
+  //         if (allIds.size > 0) {
+  //           fetchProductList(Array.from(allIds), "restore")
+  //         };
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log("error resote: ", err);
+  //     setMessages([
+  //       {
+  //         id: crypto.randomUUID(),
+  //         role: "assistant",
+  //         content: "Oops! Mình đang bận thử đồ, bạn thử lại sau ít phút nha!",
+  //         metadata: null,
+  //       },
+  //     ]);
+  //   } finally {
+  //     // setLoadingMore(false);
+  //     setLoading(false);
+  //   }
+  // };
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -261,18 +268,11 @@ export default function ChatBox({
 
   // Gửi tin nhắn
   const handleSend = async (customInput?: string | null) => {
-    if (!customInput) {
-      if (!input.trim() || loading) return;
-    }
-
     let sendInput = customInput || input;
-    if (sendInput.toLowerCase().includes("thêm phụ kiện")) {
-      sendInput = sendInput.toLowerCase().replace("thêm phụ kiện", "phụ kiện");
-    }
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
-      content: sendInput,
+      content: sendInput.trim(),
       metadata: null,
     };
     setLoading(true);
@@ -287,14 +287,14 @@ export default function ChatBox({
     })
     setQuickReplies([]);
 
-    console.log("data sent: ", body);
+    // console.log("data sent: ", body);
     const token = Cookies.get("accessToken");
     try {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${token}`,
         },
         credentials: "include",
         body
@@ -303,108 +303,14 @@ export default function ChatBox({
       // Xử lý response sau khi nhận
 
       const data = await res.json();
-      console.log("data received: ", data);
-
-
+      console.log("data : ", data);
       const botMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: "assistant",
-        content: data.message || data.content || data.ask,
+        content: data.text,
         metadata: {},
       };
-
-      // console.log(data.content);
-
-      // Có outfit
-      if (data.ask) {
-        const askContent = (data.ask as string).trim() === botMessage.content.trim() ? "" : data.ask;
-        botMessage.content = (botMessage.content ? (botMessage.content + "\n") : "") + askContent;
-      }
-      else if (data.data !== null && data.data !== undefined && data.data.length > 0) {
-        console.log("432");
-        if (data.data?.length > 0 && data.data[0].items) {
-          console.log("123");
-          if (botMessage.metadata) {
-            console.log("321");
-            botMessage.metadata.outfits = data.data.map((content: any) => ({
-              name: content.name,
-              description: content.description,
-              why: content.why,
-              items: content.items,
-              size_suggestions: content.size_suggestions ?? undefined,
-            }));
-          }
-        }
-        // else if (data.sizeSuggestions?.length && !data.data?.length && botMessage.metadata) {
-        //   console.log("size suggestions set", data.sizeSuggestions);
-        //   botMessage.metadata.size_suggestions = data.sizeSuggestions;
-        //   // Tạo outfit trống
-        //   botMessage.metadata.outfits = [{
-        //     description: "",
-        //     items: data.sizeSuggestions.map((s: any) => s.variant_id),
-        //     size_suggestions: data.sizeSuggestions.map((s: any) => s.suggested_size),
-        //   }];
-        // }
-        else {
-          if (botMessage.metadata) {
-            botMessage.metadata.items = data.data.map((item: Accessory) => (item));
-          }
-        }
-      }
-      else {
-        if (data.type === "size_suggestions") {
-          if (botMessage.metadata) {
-            botMessage.metadata.outfits = [{
-              description: "",
-              items: data.sizeSuggestions.map((s: any) => s.variant_id),
-              size_suggestions: data.sizeSuggestions.map((s: any) => s.suggested_size),
-            }];
-            const messageLines = botMessage.content.split(". ");
-            botMessage.pre_content = messageLines[0].split(": ")[0] + ":";
-            botMessage.content = messageLines[messageLines.length - 1];
-          }
-        } if (data.selected && botMessage.metadata) {
-          botMessage.pre_content = data.message;
-          botMessage.content = data.selected.description || "";
-          botMessage.metadata.items = [data.selected];
-          // botMessage.metadata!.selected = data.selected;
-        }
-      }
-      
-      // Lấy danh sách sản phẩm mới từ metadata // accessory đã gửi kèm data nên không cần
-      const newVariantIds = new Set<string>();
-      botMessage.metadata?.outfits?.forEach(o =>
-        o.items.forEach(id => newVariantIds.add(id))
-      );
-      botMessage.metadata?.size_suggestions?.forEach(s =>
-        newVariantIds.add(s.variant_id)
-      );
-
-      if (newVariantIds.size > 0) {
-        fetchProductList(Array.from(newVariantIds), "newmessage");
-      }
-
-      // FollowUp
-      if (data.followUp && botMessage.metadata) {
-        botMessage.metadata.followUp = data.followUp;
-        setQuickReplies(data.followUp.quickReplies ?? []);
-      } else {
-        setQuickReplies([]);
-      }
-
-      if (botMessage.metadata && Object.keys(botMessage.metadata).length === 0) botMessage.metadata = null;
-
-      console.log("new bot mgs ", botMessage);
-      setMessages(prev => [...prev, botMessage]);
-
-      // Cập nhật sessionId nếu có thay đổi
-      if (data.sessionId) {
-        setSessionId(data.sessionId);
-        localStorage.setItem("ai_chat_session_id", data.sessionId);
-      }
-      if (newVariantIds.size === 0) {
-        isScrollToBottomRequested.current = true;
-      }
+      setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
       console.log("lỗi là: ", err);
       setMessages((prev) => [
@@ -435,9 +341,6 @@ export default function ChatBox({
 
     const minScrollTop = 1200; //min mỗi message ~ 60px -> khoảng 20 message
     // console.log("In handleScroll: ", hasReachedBottomOnce.current, scrollTop < (minScrollTop), hasMore, !isLoadingMore.current);
-    if (hasReachedBottomOnce.current && scrollTop < (minScrollTop) && hasMore && !isLoadingMore.current) {
-      loadMore();
-    }
   };
 
   // const debouncedHandleScroll = useDebounce(handleScroll, 150);
@@ -449,53 +352,6 @@ export default function ChatBox({
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasMore, nextCursor, sessionId]);
-
-  const loadMore = async () => {
-    if (isLoadingMore.current === true || !nextCursor || !sessionId) return;
-    try {
-      isLoadingMore.current = true;
-      const token = Cookies.get("accessToken");
-      const url = `${endpoint}/load-messages?session_id=${encodeURI(sessionId)}&before=${nextCursor}&limit=${encodeURI(pageSize.toString())}`;
-      const res = await fetch(url, {
-        method: "GET",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: "include",
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setHasMore(data.hasMore || false);
-        setNextCursor(data.nextCursor || null);
-
-        if (data.messages && data.messages.length > 0) {
-          const loaded: ChatMessage[] = data.messages.map((m: any) => ({
-            id: crypto.randomUUID(),
-            role: m.role,
-            content: m.content,
-            created_at: m.created_at,
-            metadata: m.metadata || null,
-          }));
-          setMessages(prev => [...loaded, ...prev]);
-
-          const allIds = new Set<string>();
-          loaded.forEach(msg => {
-            msg.metadata?.outfits?.forEach(o => o.items.forEach(id => allIds.add(id)));
-            msg.metadata?.size_suggestions?.forEach(s => allIds.add(s.variant_id));
-          });
-          if (allIds.size > 0) {
-            await fetchProductList(Array.from(allIds), "loadmore");
-
-          } else {
-            isLoadingMore.current = false;
-          }
-        }
-      }
-    } catch (err) {
-      // console.error("Lỗi load thêm chat:", err);
-    }
-  }
   return (
     <div ref={expandRef} className="fixed bottom-6 right-6 z-50">
       {/* Nút mở chat */}
@@ -532,69 +388,15 @@ export default function ChatBox({
               {messages.map((m, index) => {
                 // console.log("mst number: ", index);
                 return (
-                  <div
-                    key={m.id}
-                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div className={`
-                      flex flex-col gap-3
-                      max-w-xs px-4 py-3 rounded-2xl shadow-sm 
-                      ${m.role === "user"
-                        ? "bg-orange-500 text-white"
-                        : "bg-white border border-gray-200 text-gray-800"
-                      }`}>
-                      {m.metadata?.outfits && m.metadata.outfits.length > 0 && (
-                        <>
-                          <div className="font-semibold">Gợi ý trang phục của Luna:</div>
-                          {m.metadata.outfits?.map((outfitSet, index) => (
-                            <div key={index} className="flex flex-col gap-2">
-                              {m.metadata?.outfits && m.metadata.outfits.length > 1 && (
-                                <div className="fontA4 text-center text-gray-800 font-semibold!">Lựa chọn #{index + 1}:</div>
-                              )}
-                              <p className="fontA5">{m.pre_content}</p>
-                              <OutfitBlock outfit={outfitSet} fetchedProductList={fetchedProductList} />
-                              {/* {outfitSet && <BlockOutfitSet outfitSet={outfitSet} fetchedProductList={fetchedProductList} />} */}
-                            </div>
-                          ))}
-                        </>
-                      )}
-                      {(m.metadata?.items && m.metadata.items.length > 0) &&
-                        <>
-                          {m.pre_content && m.pre_content.length > 0 && (
-                            <p className="fontA5 mt-1">{m.pre_content}</p>
-                          )}
-                          {m.metadata.items.map((item, idx) => (
-                            <OutfitItem id={item.product_id} imgUrl={item.image_url || undefined} name={item.name} color_name={item.color || undefined} key={idx} type="accessory" />
-                          ))}
-                        </>
-                      }
-                      <p className="text-sm whitespace-pre-wrap">{m.content}</p>
-                      {m.metadata?.outfits && m.metadata.outfits.length > 0 && (
-                        <div className="fontA6 opacity-80">
-                          Đã gợi ý {m.metadata.outfits.length} set phối đồ
-                        </div>
-                      )}
+                  <div id={`message-${m.id}`} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl shadow-sm">
+                      <div className="flex items-center gap-2 text-gray-500">
+                        <span className="text-sm">{m.content}</span>
+                      </div>
                     </div>
                   </div>
                 )
               }
-              )}
-
-              {/* Quick Replies */}
-              {quickReplies.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {quickReplies.map((qr, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        handleSend(qr);
-                      }}
-                      className="px-3 py-1.5 shadow-sm outline-1 outline-gray-200 rounded-full text-sm hover:bg-gray-200 hover:shadow-md cursor-pointer transition duration-200 ease-in-out"
-                    >
-                      {qr}
-                    </button>
-                  ))}
-                </div>
               )}
 
               {loading && (
@@ -602,7 +404,7 @@ export default function ChatBox({
                   <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl shadow-sm">
                     <div className="flex items-center gap-2 text-gray-500">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">Luna đang nghĩ...</span>
+                      <span className="text-sm">Đang suy nghĩ...</span>
                     </div>
                   </div>
                 </div>
@@ -628,9 +430,9 @@ export default function ChatBox({
                 <button
                   onClick={() => handleSend()}
                   disabled={loading || !input.trim()}
-                  className="p-3 bg-orange-500 rounded-xl hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
+                  className="p-3 bg-orange-500 rounded-xl hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer transition-all group"
                 >
-                  <Send className="w-5 h-5 text-white" />
+                  <Send className="w-5 h-5 text-white group-hover:scale-125 transition-transform duration-250 ease-in-out" />
                 </button>
               </div>
             </div>

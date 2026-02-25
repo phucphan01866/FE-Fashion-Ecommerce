@@ -20,62 +20,26 @@ interface ProductProps {
 
 export default function Product({
     data,
-    itemOption = "medium",
+    // itemOption = "medium",
     isCustomer = false,
-    optionalImgUrl = "",
     isFavored = false,
     customID,
     isLoading = false,
 }: {
     data: any,
-    itemOption?: "small" | "medium" | "large" | 'fill',
+    // itemOption?: "small" | "medium" | "large" | 'fill',
     isCustomer?: boolean,
-    optionalImgUrl?: string,
     isFavored?: boolean,
     customID?: string,
     isLoading?: boolean,
 }) {
+    // console.log("Data: ," ,data);
     const iconSize = 20;
     const url = !isLoading ? `/product/${customID || data.id}` : "#";
-    let image: string = "";
-    if (optionalImgUrl && optionalImgUrl !== "") {
-        image = optionalImgUrl;
-    } else {
-        !isLoading ? (
-            data.product_images && data.product_images.length > 0
-                ? (typeof data.product_images[0] === 'string'
-                    ? data.product_images[0]
-                    : data.product_images[0]?.url ?? "/123")
-                : ("/321")
-        ) : (
-            image = "/placeholder.png"
-        )
-    }
-    // const image = typeof data.product_images[0] === 'string' ? data.product_images[0] : "/";
-    // const image = "/placeholeder.jpg";
-    let imgSize;
-    switch (itemOption) {
-        case "small": imgSize = {
-            width: 240,
-            height: 240,
-        }; break;
-        case "medium": imgSize = {
-            width: 260,
-            height: 260,
-        }; break;
-        case "large": imgSize = {
-            width: 420,
-            height: 480,
-        }; break;
-        case "fill": imgSize = {
-            width: 'auto',
-            height: 'auto',
-        }; break;
-    };
-
+    let image: string = data?.image || data?.product_images[0] || "";
+    const imgSize = { width: 260, height: 260 };
     const { addItem } = useCart();
     function handleClick(data: TypeProduct) {
-        console.log("Add to cart clicked for product:", data);
         const stockAvailableProduct = data.variants.find(variant => variant.stock_qty > 0);
         if (!stockAvailableProduct) {
             return;
@@ -86,16 +50,9 @@ export default function Product({
     return (
         <div className={`relative flex-shrink-0 grid p-2 bg-white shadow-sm hover:drop-shadow-lg rounded-xl my-3`}>
             <Link href={`${url}`} className="relative aspect-1/1 w-full h-auto object-cover [user-drag:none] [-webkit-user-drag:none] overflow-hidden rounded-md"
-                style={itemOption !== 'fill' ? {
-                    width: imgSize?.width + "px",
-                    height: imgSize?.height + "px"
-                } : {
-                    width: 100 + "%",
-                    height: "auto"
-                }}
-            >
+                style={{ width: imgSize?.width + "px", height: imgSize?.height + "px" }}>
                 {!isLoading ? (
-                    <Image src={image}
+                    <Image src={image.length > 0 ? image : "/"}
                         fill
                         alt=""
                         className={`d-block object-cover rounded-md transition-transform duration-500 ease-out group-hover:scale-110 hover:!scale-110 `}></Image>
@@ -104,8 +61,7 @@ export default function Product({
             </Link>
             <div className={`mt-1 p-1 truncate grid grid-cols-[1fr_auto] font-medium gap-y-2 ${isCustomer ? "gap-x-2" : ""}`}
                 style={{ maxWidth: imgSize?.width + "px" }}>
-                <Link href={`${url}`} className={`[user-drag:none] [-webkit-user-drag:none] truncate
-                    ${itemOption === "small" ? "col-span-2" : ""}`}>
+                <Link href={`${url}`} className={`[user-drag:none] [-webkit-user-drag:none] truncate`}>
                     <h2 className={`col-start-1 truncate capitalize ${isCustomer ? "max-w-[22ch]" : ""}`}>
                         {!isLoading ? (
                             data.name
@@ -116,8 +72,7 @@ export default function Product({
                 </Link>
                 {
                     !isLoading ? (
-                        <p className={`col-start-1
-                    ${itemOption === "small" ? "h-fit self-end" : ""}`}>
+                        <p className={`col-start-1`}>
                             <span className={`${data.is_flash_sale ? 'fotnA4 !font-normal line-through' : 'fontA3 !font-semibold'}`}>
                                 {Number(data.price).toLocaleString('vi-VN')}₫</span>
                             {data.is_flash_sale && (
@@ -128,7 +83,7 @@ export default function Product({
                         <TextSleleton />
                     )
                 }
-                {isCustomer && itemOption !== "small" && (
+                {isCustomer && (
                     <button onClick={() => handleClick(data)} className={`add-to-cart-btn flex flex-col gap-2 justify-center col-start-2 rounded-full bg-orange-400 hover:bg-orange-400 hover:outline-2 hover:outline-orange-50 hover:scale-105 transition-all duration-300 ease-in-out 
                 text-2xl text-white leading-5 row-span-2 row-start-1 px-3 py-3`}>
                         <span className="">

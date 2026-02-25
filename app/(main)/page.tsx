@@ -7,19 +7,20 @@ import ProductSections from "@/app/ui/home/ProductSections";
 import NewsSection from "../ui/home/NewsSections";
 import HomeService from "@/service/public.service";
 
-export default function Home() {
+export default async function Home() {
+  let data: any;
   async function fetchHomeData() {
     try {
       const data = await HomeService.fetchHomeProducts();
-      const topBrandsData = await HomeService.fetchTopBrands();
+      console.log(data);
       return data;
     } catch (error) {
     }
   }
-  fetchHomeData();
+  data = await fetchHomeData();
 
   return (
-    <HomeProvider>
+    <HomeProvider data={data}>
       <BannerCarousel />
       <ProductSections />
       <NewsSection />
