@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* // tailwind use Mobile First (min-width)
+sm: '640px'   // Small devices (large phones)
+md: '768px'   // Medium devices (tablets)
+lg: '1024px'  // Large devices (desktops)
+xl: '1280px'  // Extra large devices
+2xl: '1536px' // 2X Extra large devices */
+/* ex: lg:w-64 -> w-64 for 1024px to above */
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .scrollbar-hidden::-webkit-scrollbar {
@@ -16,6 +24,11 @@
   textarea.field-sizing-content {
     field-sizing: content;
   }
+}
+
+:root {
+  /* preferred = min + (max - min) * ((100vw - min-viewport) / (max-viewport - min-viewport)) */
+  font-size: clamp(12px, calc(12px + (16 - 12) * ((100vw - 425px) / (1440 - 425))), 16px);
 }
 
 body {

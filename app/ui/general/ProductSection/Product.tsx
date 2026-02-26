@@ -50,7 +50,7 @@ export default function Product({
     return (
         <div className={`relative flex-shrink-0 grid p-2 bg-white shadow-sm hover:drop-shadow-lg rounded-xl my-3`}>
             <Link href={`${url}`} className="relative aspect-1/1 w-full h-auto object-cover [user-drag:none] [-webkit-user-drag:none] overflow-hidden rounded-md"
-                style={{ width: imgSize?.width + "px", height: imgSize?.height + "px" }}>
+                style={{ minWidth: imgSize?.width + "px", minHeight: imgSize?.height + "px" }}>
                 {!isLoading ? (
                     <Image src={image.length > 0 ? image : "/"}
                         fill

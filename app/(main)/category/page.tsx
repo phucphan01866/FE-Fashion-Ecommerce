@@ -87,7 +87,7 @@ function ContentArea() {
         priceTo: 150000,
     }
     return (
-        <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-4">
+        <div className="grid grid-cols-[1fr_1fr] sm:grid-cols-[1fr_1fr_1fr] lg:grid-cols-[1fr_1fr_1fr_1fr] gap-4">
             <Product data={productSampleData} />
             <Product data={productSampleData} />
             <Product data={productSampleData} />

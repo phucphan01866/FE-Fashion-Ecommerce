@@ -22,7 +22,7 @@ export default function Navigation() {
 
     const max = 4;
     return (
-        <div className='navigation flex flex-row items-center gap-2'>
+        <div className='navigation hidden lg:flex flex-row items-center gap-2'>
             <BorderlessButton>Trang chủ</BorderlessButton>
             {parentsOfChildrenList && parentsOfChildrenList.length > 0 && parentsOfChildrenList.slice(0, max).map((category: any) => (
                 <BorderlessButton

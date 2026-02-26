@@ -114,6 +114,7 @@ export default function ProductPageProvider({ children, id }: { children: React.
     function updateSelectedColor(newSKU: string) {
         const newSelectedVariant = variantList.find(variant => variant.sku === newSKU) || variantList[0];
         // console.log("New selected variant:", newSelectedVariant.id);
+        console.log("newSelectedVariant", newSelectedVariant);
         setSelectedVariant(newSelectedVariant);
         const newSelectableSizes = newSelectedVariant ? newSelectedVariant.sizes : [];
         setSelectableSizes(newSelectableSizes);

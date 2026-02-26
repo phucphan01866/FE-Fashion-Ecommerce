@@ -242,10 +242,10 @@ function ContentArea({ items }: { items: any[] }) {
     const { favoriteIdsList } = useFavorite();
 
     return (
-        <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-4">
+        <div className="grid grid-cols-[1fr_1fr] sm:grid-cols-[1fr_1fr_1fr] lg:grid-cols-[1fr_1fr_1fr_1fr] gap-4">
             {/* <Product data={productSampleData} /> */}
             {items.map((product, index) => (
-                <Product key={index} data={product} isCustomer={user?.role === "customer" ? true : false} itemOption="fill" isFavored={favoriteIdsList.includes(product.id)} />
+                <Product key={index} data={product} isCustomer={user?.role === "customer" ? true : false} isFavored={favoriteIdsList.includes(product.id)} />
             ))}
             {items.length === 0 && (
                 <p className="col-span-4 text-center text-gray-500 my-3">Không có sản phẩm phù hợp nào.</p>

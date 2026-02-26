@@ -28,9 +28,10 @@ export function PopupImage({ imageUrl, isOpen, close, open }: { imageUrl: string
                     onClick={handleImageClick}
                 />
                 <button type='button' onClick={close} className='group hover:scale-110 hover:bg-gray-500/50 transition-all duration-150 ease-in-out flex justify-center-safe items-center-safe w-8 h-8 aspect-square cursor-pointer absolute top-3.5 right-4.5 rounded-full bg-gray-400/25'>
-                    <p className='group-hover:text-gray-900 group-hover:scale-110 transition-all duration-150 ease-in-out aspect-square w-auto h-auto'>
-                        X
-                    </p>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path className='group-hover:stroke-gray-900' d="M18 6L6 18" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path className='group-hover:stroke-gray-900' d="M6 6L18 18" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                 </button>
             </div>
         </div>
