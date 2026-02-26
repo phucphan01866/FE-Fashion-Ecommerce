@@ -60,6 +60,18 @@ function Center() {
   //     console.table(error);
   //   }
   // }
+  async function test() {
+    try {
+      const testResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/test-connect-be`, {
+        method: 'GET',
+      });
+      const testResult = await testResponse.json();
+      console.log("Test BE connection:", testResult);
+    } catch (error) {
+      console.error("Error testing BE connection:", error);
+    }
+  }
+  test();
   return (
     <div className={`${wrapperStyle}`}>
       {/* <button onClick={test}>Test</button> */}
