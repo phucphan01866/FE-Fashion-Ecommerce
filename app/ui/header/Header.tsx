@@ -72,6 +72,14 @@ function Center() {
     }
   }
   test();
+  async function testDB() {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/test-db`, {
+      method: 'GET',
+    });
+    const data = await res.json();
+    console.log("Test DB connection:", data);
+  }
+  testDB();
   return (
     <div className={`${wrapperStyle}`}>
       {/* <button onClick={test}>Test</button> */}
