@@ -62,7 +62,7 @@ function Center() {
   // }
   async function test() {
     try {
-      const testResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/test-connect-be`, {
+      const testResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/test`, {
         method: 'GET',
       });
       const testResult = await testResponse.json();
