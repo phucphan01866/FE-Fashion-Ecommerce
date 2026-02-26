@@ -6,13 +6,13 @@ import { HomeProvider } from "@/context/HomeContext";
 import ProductSections from "@/app/ui/home/ProductSections";
 import NewsSection from "../ui/home/NewsSections";
 import HomeService from "@/service/public.service";
-import { Suspend } from 'react';
+import { Suspense } from 'react';
 
 export default function Page() {
   return (
-    <Suspend fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <Home />
-    </Suspend>
+    </Suspense>
   )
 }
 
