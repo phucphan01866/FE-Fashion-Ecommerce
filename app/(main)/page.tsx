@@ -18,6 +18,12 @@ export default async function Home() {
     }
     const data = await fetchHomeData();
 
+    const testResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/test-connect-be`, {
+      method: 'GET',
+    });
+    const testResult = await testResponse.json();
+    console.log("Test BE connection:", testResult);
+
     return (
       <HomeProvider data={data}>
         <BannerCarousel />
