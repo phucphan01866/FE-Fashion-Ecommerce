@@ -62,7 +62,7 @@ function Center() {
   // }
   async function test() {
     try {
-      const testResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/test`, {
+      const testResponse = await fetch(`https://be-fashion-ecommerce.onrender.com/test`, {
         method: 'GET',
       });
       const testResult = await testResponse.json();
