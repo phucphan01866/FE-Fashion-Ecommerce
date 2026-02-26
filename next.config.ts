@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
-          { key: 'Access-Control-Allow-Origin', value: 'https://fe-fashion-ecommerce.onrender.com/' }, // dev thì *, prod thay bằng domain cụ thể
+          { key: 'Access-Control-Allow-Origin', value: '*' }, // dev thì *, prod thay bằng domain cụ thể
           { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, PATCH, DELETE, OPTIONS' },
           {
             key: 'Access-Control-Allow-Headers',
