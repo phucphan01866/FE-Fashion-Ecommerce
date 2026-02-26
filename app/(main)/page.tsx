@@ -7,7 +7,15 @@ import ProductSections from "@/app/ui/home/ProductSections";
 import NewsSection from "../ui/home/NewsSections";
 import HomeService from "@/service/public.service";
 
-export default async function Home() {
+export default function Page() {
+  return (
+    <Suspend fallback={<div>Loading...</div>}>
+      <Home />
+    </Suspend>
+  )
+}
+
+ async function Home() {
   async function fetchHomeData() {
     try {
       const data = await HomeService.fetchHomeProducts();
