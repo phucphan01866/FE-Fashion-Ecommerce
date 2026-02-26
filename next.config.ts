@@ -9,20 +9,21 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Áp dụng cho tất cả /api/*
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
-          { key: 'Access-Control-Allow-Origin', value: '*' }, // hoặc domain cụ thể
-          { key: 'Access-Control-Allow-Methods', value: 'GET,DELETE,PATCH,POST,PUT,OPTIONS' },
+          { key: 'Access-Control-Allow-Origin', value: 'https://fe-fashion-ecommerce.onrender.com/' }, // dev thì *, prod thay bằng domain cụ thể
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, PATCH, DELETE, OPTIONS' },
           {
             key: 'Access-Control-Allow-Headers',
-            value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization', // thêm Authorization
           },
+          { key: 'Access-Control-Max-Age', value: '86400' }, // Cache preflight 24h (giảm OPTIONS request)
         ],
       },
-    ]
-  }
+    ];
+  },
 };
 
 export default nextConfig;
