@@ -6,7 +6,7 @@ import { HomeProvider } from "@/context/HomeContext";
 import ProductSections from "@/app/ui/home/ProductSections";
 import NewsSection from "../ui/home/NewsSections";
 import HomeService from "@/service/public.service";
-import { Suspend } from "react-wrap-with-suspense";
+import { Suspend } from 'react';
 
 export default function Page() {
   return (
