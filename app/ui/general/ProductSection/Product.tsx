@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import "./style.css";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { TypeProduct } from "@/service/product.service";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
 import { useCart } from "@/context/CartContext";
@@ -51,13 +51,15 @@ export default function Product({
         <div className={`relative flex-shrink-0 grid p-2 bg-white shadow-sm hover:drop-shadow-lg rounded-xl my-3`}>
             <Link href={`${url}`} className="relative aspect-1/1 w-full h-auto object-cover [user-drag:none] [-webkit-user-drag:none] overflow-hidden rounded-md"
                 style={{ minWidth: imgSize?.width + "px", minHeight: imgSize?.height + "px" }}>
-                {!isLoading ? (
+                <Suspense fallback={<ImageSkeleton />}>
+                    {!isLoading ? (
                     <Image src={image.length > 0 ? image : "/"}
                         fill
                         alt=""
                         className={`d-block object-cover rounded-md transition-transform duration-500 ease-out group-hover:scale-110 hover:!scale-110 `}></Image>
 
                 ) : (<ImageSkeleton />)}
+                </Suspense>
             </Link>
             <div className={`mt-1 p-1 truncate grid grid-cols-[1fr_auto] font-medium gap-y-2 ${isCustomer ? "gap-x-2" : ""}`}
                 style={{ maxWidth: imgSize?.width + "px" }}>
