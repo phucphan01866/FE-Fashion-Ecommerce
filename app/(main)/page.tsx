@@ -8,15 +8,15 @@ import NewsSection from "../ui/home/NewsSections";
 import HomeService from "@/service/public.service";
 import { Suspense } from 'react';
 
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Home />
-    </Suspense>
-  )
-}
+// export default function Page() {
+//   return (
+//     <Suspense fallback={<div>Loading...</div>}>
+      
+//     </Suspense>
+//   )
+// }
 
- async function Home() {
+export default async function Home() {
   async function fetchHomeData() {
     try {
       const data = await HomeService.fetchHomeProducts();
@@ -25,14 +25,14 @@ export default function Page() {
     } catch (error) {
       console.error(error);
     }
-    const data = await fetchHomeData();
-
-    return (
-      <HomeProvider data={data}>
-        <BannerCarousel />
-        <ProductSections />
-        <NewsSection />
-      </HomeProvider>
-    );
   }
+  const data = await fetchHomeData();
+
+  return (
+    <HomeProvider data={data}>
+      <BannerCarousel />
+      <ProductSections />
+      <NewsSection />
+    </HomeProvider>
+  );
 }
