@@ -1,6 +1,7 @@
 'use client'
 import Link from "next/link";
 import Image from "next/image";
+import { Suspense } from "react";
 import Breadcrumb from "@/app/ui/general/Breadcrumb/Breadcrumb";
 import Product from "@/app/ui/general/ProductSection/Product";
 import { useHomeProductPage, HomeProductPageProvider } from "@/context/HomeProductContext";
@@ -12,11 +13,13 @@ import { useFavorite } from "@/context/FavoriteContext";
 import { SpinLoadingSkeleton, TextLoadingSkeleton } from "@/app/ui/general/skeletons/LoadingSkeleton";
 import { formatVND } from "@/app/ui/user/admin/promotion/PromotionForm";
 
-export default function page() {
+export default function Page() {
     return (
-        <HomeProductPageProvider>
-            <PageContent />
-        </HomeProductPageProvider>
+        <Suspense fallback={<div className="container p-4"><SpinLoadingSkeleton /><TextLoadingSkeleton /></div>}>
+            <HomeProductPageProvider>
+                <PageContent />
+            </HomeProductPageProvider>
+        </Suspense>
     );
 }
 
@@ -185,7 +188,7 @@ function FilterArea() {
                     defaultItem={supplier_id || ''}
                 />
             )}
-            <div className="basis-full"/>
+            <div className="basis-full" />
             {/* Price Range */}
             <div className="flex items-end gap-2">
                 <InputField

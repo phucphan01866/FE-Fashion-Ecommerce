@@ -2,14 +2,13 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import Input, { InputField } from "@/app/ui/general/Input/Input";
+import { InputField } from "@/app/ui/general/Input/Input";
 import uploadToCloudinary from "@/helper/uploadToCloudinaryHelper";
 import { sectionCSS, Divider } from "../../../general/general";
 import setPreviewImageHelper from "@/helper/setPreviewImageHelper";
 import { useAdminSupplierContext } from "@/context/AdminContexts/AdminSupplierContext";
 import { createSupplier } from "@/service/supplier.service";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
-import { th } from "framer-motion/client";
 
 export default function SupplierCreateForm() {
     const [previewImage, setPreviewImage] = useState<string | null>(null);

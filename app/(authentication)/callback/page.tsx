@@ -1,10 +1,18 @@
 'use client';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
-export default function AuthCallback() {
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="font-a5 italic text-center mt-4">Đang xử lý đăng nhập...</div>}>
+      <AuthCallback />
+    </Suspense>
+  );
+}
+
+function AuthCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const status = searchParams.get('status');
@@ -63,8 +71,10 @@ export default function AuthCallback() {
   }, [router, searchParams, status]);
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <p className="text-lg font-medium">Đang đăng nhập, vui lòng chờ...</p>
-    </div>
+    <Suspense fallback={<div className="font-a5 italic text-center mt-4">Đang xử lý đăng nhập...</div>}>
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-lg font-medium">Đăng nhập thành công!</p>
+      </div>
+    </Suspense>
   );
 }

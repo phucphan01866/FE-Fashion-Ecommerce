@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { sectionCSS, inputCSS, GeneralButton, Title, SeeMoreButton } from "@/app/ui/user/general/general";
 import { InputField, InputSelect } from "@/app/ui/general/Input/Input";
 // import { useraddressList, userInfo } from "@/app/demo";
@@ -15,9 +15,11 @@ import { useRouter } from "next/navigation";
 
 export default function page({ children }: { children?: React.ReactNode }) {
     return (
-        <AddressProvider>
-            <PageContent />
-        </AddressProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+            <AddressProvider>
+                <PageContent />
+            </AddressProvider>
+        </Suspense>
     );
 }
 

@@ -14,7 +14,7 @@ export default function page({ }) {
         <div className="orderPage px-4 py-2 flex flex-col gap-4">
             <Title>Thông tin tài khoản</Title>
             <PersonalInfoSection />
-            <addressInfoSection />
+            <AddressInfoSection />
         </div>
     );
 }
@@ -65,7 +65,7 @@ function PersonalInfoSection() {
 
 }
 
-function addressInfoSection() {
+function AddressInfoSection() {
     return (
         <div className={`addressInfoSection ${sectionCSS}`}>
             {useraddressList.map((address, index) => (

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { sectionCSS } from "@/app/ui/user/general/general";
 import { Divider } from "@/app/ui/user/general/general";
 import OrderService from "@/service/order.service";
@@ -18,12 +18,19 @@ import { useRouter } from "next/navigation";
 
 
 export default function Page() {
-    const { setNotification } = useNotificateArea();
-    const [product, setProduct] = useState<TypeProduct | null>(null);
+    return (
+        <Suspense fallback={<BasicLoadingSkeleton />}>
+            <SuspenseWrapper />
+        </Suspense>
+    );
+}
+
+function SuspenseWrapper() {
     const searchParams = useSearchParams();
     const orderId = searchParams.get("orderId");
     const variantId = searchParams.get("variantId");
-
+    const { setNotification } = useNotificateArea();
+    const [product, setProduct] = useState<TypeProduct | null>(null);
     async function fetchProduct(variantId: string) {
         try {
             const data = await productService.user.getProductFromVariant(variantId);
@@ -38,12 +45,15 @@ export default function Page() {
         }
     }, [orderId, variantId]);
     return (
-        product ? (
-            <PageContent product={product} variantId={variantId || ""} orderId={orderId || ""} />
-        ) : (
-            <BasicLoadingSkeleton />
-        )
-    );
+        <Suspense fallback={<BasicLoadingSkeleton />}>
+            {product ? (
+                // <PageContent product={product} variantId={variantId || ""} orderId={orderId || ""} />
+                <p>Place holder</p>
+            ) : (
+                <BasicLoadingSkeleton />
+            )}
+        </Suspense>
+    )
 }
 
 interface PreviewProductProps {
@@ -301,7 +311,7 @@ function UserInputReview({ product, variantId, orderId }: { product: TypeProduct
             <div className="flex justify-end-safe pt-4 border-t border-gray-200">
                 <button
                     type="button"
-                    onClick={()=>{handleSubmit()}}
+                    onClick={() => { handleSubmit() }}
                     // disabled={!reviewText.trim() || !imageFile || isSubmitting}
                     className={`
             px-10 py-3 rounded-lg font-medium transition-all shadow-md flex items-center gap-2

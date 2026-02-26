@@ -36,7 +36,7 @@ export default function Product({
     // console.log("Data: ," ,data);
     const iconSize = 20;
     const url = !isLoading ? `/product/${customID || data.id}` : "#";
-    let image: string = data?.image || data?.product_images[0] || "";
+    const image: string = data?.image || data?.product_images[0] || "";
     const imgSize = { width: 260, height: 260 };
     const { addItem } = useCart();
     function handleClick(data: TypeProduct) {

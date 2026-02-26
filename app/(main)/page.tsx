@@ -8,22 +8,22 @@ import NewsSection from "../ui/home/NewsSections";
 import HomeService from "@/service/public.service";
 
 export default async function Home() {
-  let data: any;
   async function fetchHomeData() {
     try {
       const data = await HomeService.fetchHomeProducts();
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
+      console.error(error);
     }
-  }
-  data = await fetchHomeData();
+    const data = await fetchHomeData();
 
-  return (
-    <HomeProvider data={data}>
-      <BannerCarousel />
-      <ProductSections />
-      <NewsSection />
-    </HomeProvider>
-  );
+    return (
+      <HomeProvider data={data}>
+        <BannerCarousel />
+        <ProductSections />
+        <NewsSection />
+      </HomeProvider>
+    );
+  }
 }

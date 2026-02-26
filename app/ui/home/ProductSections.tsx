@@ -27,7 +27,7 @@ function ProductSection_Discounting() {
 
 export function ProductSection_NewProduct() {
     const { newsestProducts, isProductsLoading } = useHome();
-    console.log("news: ", newsestProducts);
+    // console.log("news: ", newsestProducts);
     return (
         <ProductSection_SingleTab listProduct={newsestProducts.items || []} isLoading={isProductsLoading} title="Sản phẩm mới ra mắt" />
     );

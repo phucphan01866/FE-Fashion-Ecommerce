@@ -1,6 +1,6 @@
 'use client'
-import Input, { InputField, InputSelect, TextArea, InputToggle, TypeInputSelect, ControllableInputSelect } from "@/app/ui/general/Input/Input";
-import { Title, Divider, sectionCSS } from "../../general/general";
+import { InputField, TextArea, InputToggle, TypeInputSelect, ControllableInputSelect } from "@/app/ui/general/Input/Input";
+import { Title, sectionCSS } from "../../general/general";
 import { useState, useEffect } from "react";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
 import { adminPromotionService, PromotionFormData } from "@/service/promotion.service";

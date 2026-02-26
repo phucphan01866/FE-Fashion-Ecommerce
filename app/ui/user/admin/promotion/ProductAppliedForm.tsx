@@ -65,7 +65,7 @@ export default function ProductAppliedForm({ isLoading, suppliers, categories, s
                     supplier: suppliers.find(sup => sup.content === product.supplier_id)?.label,
                 })));
             } catch (err) {
-
+                console.error("Lỗi khi tìm kiếm sản phẩm:", err);
             }
         }
         ProductQuickSearch();

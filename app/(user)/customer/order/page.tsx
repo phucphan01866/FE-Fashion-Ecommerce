@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { Suspense, useContext, useState } from "react";
 import { Title, BaseUserPageLayout, sectionCSS, sectionGridCSS, Divider, VoidGeneralButton } from "@/app/ui/user/general/general";
 import OrderService, { OrderListItem, OrderStatusLabel } from "@/service/order.service";
 import { OrderProvider, useOrder } from "@/context/customer/OrderContext";
@@ -12,14 +12,16 @@ import { ControllableInputSelect } from "@/app/ui/general/Input/Input";
 export default function page({ }) {
     return (
         <BaseUserPageLayout>
-            <OrderProvider>
-                <Title>
-                    <p>Đơn hàng của tôi</p>
-                    <VoidGeneralButton />
-                </Title>
-                {/* <SummarySection /> */}
-                <OrderListSection />
-            </OrderProvider>
+            <Suspense fallback={<div className="font-a5 italic text-center mt-4">Đang tải đơn hàng...</div>}>
+                <OrderProvider>
+                    <Title>
+                        <p>Đơn hàng của tôi</p>
+                        <VoidGeneralButton />
+                    </Title>
+                    {/* <SummarySection /> */}
+                    <OrderListSection />
+                </OrderProvider>
+            </Suspense>
         </BaseUserPageLayout>
     );
 }

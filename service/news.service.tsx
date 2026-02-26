@@ -12,7 +12,8 @@ export interface CreateNewsRequest {
 export type TextBlock = { type: 'text'; text: string };
 export type ImageBlock = {
     type: 'image';
-    urls: Array<string | { url: string; position?: number }>;
+    // urls: Array<string | { url: string; position?: number }>;
+    urls: Array<{ url: string; position?: number }>;
 };
 
 export interface NewsResponse {
@@ -142,7 +143,7 @@ export const newsService = {
                 throw new Error('Lấy danh sách tin tức thất bại');
             }
             const data = await response.json();
-            console.log('news ,', data);
+            // console.log('news ,', data);
             return data;
         },
         async getNewsById(newsId: string): Promise<NewsResponse> {

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { sectionCSS } from "@/app/ui/user/general/general";
 import { Divider } from "@/app/ui/user/general/general";
 import OrderService from "@/service/order.service";
@@ -18,6 +18,14 @@ import { useRouter } from "next/navigation";
 
 
 export default function Page() {
+    return (
+        <Suspense fallback={<div className="font-a5 italic text-center mt-4">Đang tải thông tin đánh giá...</div>}>
+            <SuspenseWrapper />
+        </Suspense>
+    );
+}
+
+function SuspenseWrapper() {
     const { setNotification } = useNotificateArea();
     const [product, setProduct] = useState<TypeProduct | null>(null);
     const searchParams = useSearchParams();

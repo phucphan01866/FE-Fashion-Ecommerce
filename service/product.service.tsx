@@ -26,6 +26,7 @@ export interface TypeProduct extends TypeProductPayload {
     category_name: string;
     supplier_name: string;
     status?: string;
+    image: string;
 }
 
 export interface productImage {

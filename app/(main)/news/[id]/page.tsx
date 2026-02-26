@@ -13,7 +13,7 @@ import { formatDate } from '@/helper/formatDateHelper';
 import Breadcrumb from '@/app/ui/general/Breadcrumb/Breadcrumb';
 import track from '@/utils/track';
 
-export default function page() {
+export default function Page() {
     const params = useParams();
     const newsId = params.id as string;
     const [isLoading, setIsLoading] = useState(true);

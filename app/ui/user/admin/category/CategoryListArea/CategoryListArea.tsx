@@ -1,20 +1,16 @@
 
 import { useAdminCategoryContext } from "@/context/AdminContexts/AdminCategoryContext";
-import { sectionCSS, Divider } from "../../../general/general";
+import { sectionCSS } from "../../../general/general";
 import { TypeCategory } from "@/service/category.service";
 import Image from "next/image";
 import { deleteCategory } from "@/service/category.service";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
 import { useAdminEditCategoryContext } from "@/context/AdminContexts/AdminEditCategoryContext";
 import { ControllableInputSelect } from "@/app/ui/general/Input/Input";
 
 export default function CategoryListArea() {
     const { categoryList } = useAdminCategoryContext();
-    const [filteredList, setFilteredList] = useState<TypeCategory[]>([]);
-    useEffect(() => {
-        setFilteredList(categoryList);
-    }, [categoryList])
     const [filterId, setFilterId] = useState<string>('');
     return (
         <div className={`CategoryTable ${sectionCSS} flex-1 flex flex-col gap-4`}>

@@ -11,7 +11,7 @@ import { useNotificateArea } from "@/context/NotificateAreaContext";
 import { useDebounce } from "@/hooks";
 import { on } from "events";
 
-export default function page({ }) {
+export default function Page({ }) {
     return (
         <BaseUserPageLayout>
             <Title>
@@ -133,7 +133,7 @@ function Order({ data }: { data: OrderListItem }) {
     return (
         <tr className={`Order hover:bg-gray-100 rounded-lg`}>
             <th className={`${bodyItemCSS}`}>
-                {data?.full_name! || data?.name! || data?.user_email!}
+                {data?.full_name ?? data?.name ?? data?.user_email ?? "Khách vãng lai"}
             </th>
             <th className={`${bodyItemCSS}`}>
                 {new Date(data.created_at).toLocaleString('vi-VN', {

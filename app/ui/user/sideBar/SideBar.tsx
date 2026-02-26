@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+// import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import { adminMenuList, customerMenuList } from "@/app/menu";
 
 

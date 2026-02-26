@@ -268,7 +268,7 @@ export default function ChatBox({
 
   // Gửi tin nhắn
   const handleSend = async (customInput?: string | null) => {
-    let sendInput = customInput || input;
+    const sendInput = customInput || input;
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
@@ -388,7 +388,7 @@ export default function ChatBox({
               {messages.map((m, index) => {
                 // console.log("mst number: ", index);
                 return (
-                  <div id={`message-${m.id}`} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div id={`message-${m.id}`} key={`msg-` + m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl shadow-sm">
                       <div className="flex items-center gap-2 text-gray-500">
                         <span className="text-sm">{m.content}</span>
@@ -465,8 +465,7 @@ function OutfitBlock({
           }
 
           const imgUrl = typeof variant.images?.[0] === "string"
-            ? variant.images[0]
-            : variant.images?.[0]?.url || "/placeholder.jpg";
+            ? variant.images[0] : variant.images?.[0] || "/placeholder.jpg";
 
           return (
             <div key={variantId} className="flex flex-col items-center">

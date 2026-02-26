@@ -3,11 +3,8 @@
 import { Title } from "@/app/ui/user/general/general";
 import ProductForm from "@/app/ui/user/admin/product/edit/ProductForm";
 import VariantForms from "@/app/ui/user/admin/product/edit/VariantForms";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useAdminUpdateProductContext } from "@/context/AdminContexts/AdminUpdateProductContext";
-import { TypeProductPayload } from "@/service/product.service";
-import { TypeVariantPayload } from "@/service/variant.service";
-import uploadToCloudinary from "@/helper/uploadToCloudinaryHelper";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
 
 export interface ProductFormErrors {

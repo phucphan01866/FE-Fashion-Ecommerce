@@ -8,7 +8,7 @@ export interface TypeVariantPayload {
     color_code: string;
     sizes: string[];
     stock_qty: number;
-    images: string[]| { url: string }[];
+    images: string[];
     images_files?: Map<number, File>;
 }
 

@@ -23,7 +23,7 @@ interface TypeUserProfileUpdate {
     full_name: string, phone: string, name: string;
 }
 
-export default function page({ }) {
+export default function Page({ }) {
     const setNoti = useNotificateArea().setNotification;
     const [originUserData, setOriginUserData] = useState<TypeFullProfileUpdate>();
     const [isGoogleAccount, setIsGoogleAccount] = useState<boolean>(false);

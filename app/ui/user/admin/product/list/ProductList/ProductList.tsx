@@ -1,17 +1,10 @@
-
-import { useAdminCategoryContext } from "@/context/AdminContexts/AdminCategoryContext";
-import { sectionCSS, Divider, SeeMoreButton } from "@/app/ui/user/general/general";
+import { sectionCSS, SeeMoreButton } from "@/app/ui/user/general/general";
 import Input, { InputSelect, InputField, InputToggle, ControllableInputSelect } from "@/app/ui/general/Input/Input";
-import { TypeCategory } from "@/service/category.service";
-import Image from "next/image";
 import Link from "next/link";
-import { deleteCategory } from "@/service/category.service";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNotificateArea } from "@/context/NotificateAreaContext";
-import { useAdminEditCategoryContext } from "@/context/AdminContexts/AdminEditCategoryContext";
 import { useAdminProductContext } from "@/context/AdminContexts/AdminProductContext";
-import { TypeProduct, removeProduct, updateSaleOffStatus } from "@/service/product.service";
-import { useParams } from "next/navigation";
+import { TypeProduct, updateSaleOffStatus } from "@/service/product.service";
 import { usePublic } from "@/context/PublicContext";
 
 export default function CategoryListArea() {

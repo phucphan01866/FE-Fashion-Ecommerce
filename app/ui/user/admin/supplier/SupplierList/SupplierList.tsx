@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { sectionCSS, Divider } from "@/app/ui/user/general/general";
+import { sectionCSS } from "@/app/ui/user/general/general";
 import { TypeSupplier } from "@/service/supplier.service";
 import { useAdminSupplierContext } from "@/context/AdminContexts/AdminSupplierContext";
 import { removeSupplier } from "@/service/supplier.service";

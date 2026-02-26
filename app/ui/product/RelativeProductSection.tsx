@@ -12,7 +12,7 @@ export default function RelativeProductSection({ relativeList }: { relativeList:
                     <p className="fontA1 justify-self-center self-center w-full">Sản phẩm liên quan</p>
                     <Link className="w-fit ml-auto fontA5 hover:text-orange-600 transition-all duration-100" href={`/product?category_id=${encodeURI(relativeList[0].category_id)}`} >Xem thêm</Link>
                 </div>
-                <ProductListHorizontal products={relativeList} itemOption="small"></ProductListHorizontal>
+                <ProductListHorizontal products={relativeList}></ProductListHorizontal>
             </div>
         ) : null
     );

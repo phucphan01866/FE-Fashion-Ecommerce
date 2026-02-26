@@ -11,7 +11,7 @@ import BasicLoadingSkeleton from "@/app/ui/general/skeletons/LoadingSkeleton";
 
 export default function NewsEditForm() {
     const { setNotification } = useNotificateArea();
-    const { blocks, submitNews, errors, oldNewsData, oldPreviewThumbnailUrl, isSubmitting } = useEditNews();
+    const { submitNews, errors, oldNewsData, oldPreviewThumbnailUrl, isSubmitting } = useEditNews();
     if (!oldNewsData) {
         return <BasicLoadingSkeleton />;
     } else
@@ -117,7 +117,7 @@ function BlockImage({
 }) {
     // const [imageFile, setImageFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>('urls' in block && block.urls && Array.isArray(block.urls) && block.urls.length > 0 ? block.urls[0]?.url : null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // const [isSubmitting, setIsSubmitting] = useState(false);
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -175,13 +175,12 @@ function BlockImage({
                 accept="image/jpeg,image/png,image/webp"
                 onChange={handleImageChange}
                 className="hidden"
-                disabled={isSubmitting}
+                // disabled={isSubmitting}
             />
 
             <label
                 htmlFor={'newsImage-' + index}
                 className={`block relative cursor-pointer rounded-lg overflow-hidden border-2 border-dashed transition-all
-                    ${isSubmitting ? "pointer-events-none opacity-60" : "hover:border-primary"}
                     ${previewUrl ? "border-primary" : "border-gray-300"}
                 `}
             >

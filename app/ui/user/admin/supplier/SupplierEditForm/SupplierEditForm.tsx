@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Input, { InputField } from "@/app/ui/general/Input/Input";
+import { InputField } from "@/app/ui/general/Input/Input";
 import uploadToCloudinary from "@/helper/uploadToCloudinaryHelper";
 import { sectionCSS, Divider } from "../../../general/general";
 import setPreviewImageHelper from "@/helper/setPreviewImageHelper";

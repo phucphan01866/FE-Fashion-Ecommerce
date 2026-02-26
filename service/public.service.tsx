@@ -42,7 +42,7 @@ const HomeService = {
         //     })),
         // }));
         // console.log("r1 ", result1);
-        console.log("pre-r3:, " ,result3);
+        // console.log("pre-r3:, " ,result3);
         // console.log("r3 ", processedCategories);
         const result = { flashSales: result1.flashSales, newest: result1.newest, categories: result3.categories };
         // console.log("resule :", result);

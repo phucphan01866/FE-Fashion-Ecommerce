@@ -57,9 +57,9 @@ function ContentArea({ favoriteData }: { favoriteData: FavoriteProductsLists | u
             {favoriteData && favoriteData.items && favoriteData.items.length > 0 && favoriteData.items.map((item) => (
                 <Product
                     key={item.product_id}
-                    itemOption="fill"
+                    // itemOption=
                     data={item}
-                    optionalImgUrl={item.images[0].url}
+                    // optionalImgUrl={item.images[0].url}
                     isCustomer={true}
                     isFavored={favoriteIdsList.includes(item.product_id) ? true : false}
                     customID={item.product_id}
