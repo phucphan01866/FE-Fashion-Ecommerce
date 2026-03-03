@@ -24,7 +24,7 @@ export default function Navigation() {
     return (
         <div className='navigation hidden lg:flex flex-row items-center gap-2'>
             <BorderlessButton>Trang chủ</BorderlessButton>
-            {parentsOfChildrenList && parentsOfChildrenList.length > 0 && parentsOfChildrenList.slice(0, max).map((category: any) => (
+            {parentsOfChildrenList && parentsOfChildrenList.length > 0 && parentsOfChildrenList.slice(0, max).map((category: any, index: number) => (
                 <BorderlessButton
                     key={category.id}
                     type="list"
@@ -38,6 +38,7 @@ export default function Navigation() {
                                 key: item.id,
                             }))
                     }
+                    mainBtnBonusCss={index >=2 ? 'lg:hidden xl:inline-flex' : ''}
                 >
                     {category.name}
                 </BorderlessButton>))}

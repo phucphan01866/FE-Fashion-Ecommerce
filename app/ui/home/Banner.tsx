@@ -8,6 +8,8 @@ import Link from "next/link";
 //     buttonText: string;
 // }
 
+export const bannerRatioCSS = `aspect-[1250/750] lg:aspect-[1500/520]`;
+
 interface BannerProps {
     src: string;
     id: string;
@@ -16,7 +18,7 @@ interface BannerProps {
 export default function Banner({ data, currentIndex, thisBannerIndex }: { data: BannerProps, currentIndex: number, thisBannerIndex: number }) {
     return (
         <div
-            className="absolute h-[520px] w-screen z-0"
+            className={`absolute h-auto w-screen z-0 ${bannerRatioCSS}`}
             style={{ transform: `translateX(-${(thisBannerIndex - currentIndex) * 100}%)` }}>
             < Image src={data.src} fill sizes="100vw" alt="outer banner"
                 className="object-cover blur-sm w-[150%] -ml-[12px] scaleX-[1.5]" />

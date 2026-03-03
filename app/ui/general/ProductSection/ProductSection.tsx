@@ -8,6 +8,7 @@ import BasicLoadingSkeleton from "../skeletons/LoadingSkeleton";
 import Image from "next/image";
 import { usePublic } from "@/context/PublicContext";
 import Link from "next/link";
+import { bannerRatioCSS } from "../../home/Banner";
 
 // export function ProductSection({ listProduct, listTab, title, bannerSrc, link, mode, isLoading = false }: { listProduct?: TypeProduct[], listTab?: { label: string, products: TypeProduct[], id: string }[], title: string, bannerSrc?: string, link?: string, mode?: string, isLoading?: boolean }) {
 //     if (listTab && listTab.length > 0) return (
@@ -148,7 +149,7 @@ function TabList({ listTab, selectedTab, onTabSelect }: { listTab: string[], sel
 
 function ProductSection_Banner({ bannerSrc }: { bannerSrc: string }) {
     return (
-        <div className="container relative block w-full h-[460px] mb-6">
+        <div className={`container relative block w-full h-auto mb-6 ${bannerRatioCSS}`}>
             <div className="container relative w-full h-full rounded-2xl overflow-hidden">
                 <Image src={bannerSrc} alt="category_banner" fill className="object-cover" />
             </div>

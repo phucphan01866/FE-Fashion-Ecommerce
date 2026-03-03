@@ -55,8 +55,8 @@ export default function BaseAuthForm({ type, children, socialButtons, footerCont
         title: "Đặt lại mật khẩu",
     } : null)
     return (
-        <div className="h-[90dvh] min-h-fit w-[100%] flex flex-row px-12 py-2 bg-white">
-            <div className="relative min-h-fit w-1/2 flex justify-center items-center ml-12 my-2">
+        <div className="h-[90dvh] min-h-fit w-[100%] flex flex-row justify-center-safe px-12 py-2 bg-white">
+            <div className="relative min-h-fit w-3/4 md:w-1/2 flex justify-center items-center ml-12 my-2">
                 <div className={`max-w-[450px] w-full flex flex-col gap-4 ${formBonusCSS}`}>
                     <div className="">
                         <h1 className="text-2xl font-semibold mb-2">{textContent?.title}</h1>
@@ -81,8 +81,8 @@ export default function BaseAuthForm({ type, children, socialButtons, footerCont
 
                 </div>
             </div>
-            <div className="relative flex-1 ml-12 my-2">
-                <Image src="/image/BG_1.jpg" alt="/" fill className="rounded-lg"></Image>
+            <div className="relative flex-1 ml-12 my-2 hidden md:block">
+                <Image src="/image/BG_1.jpg" alt="/" fill className="rounded-lg object-cover"></Image>
             </div>
         </div>
     );

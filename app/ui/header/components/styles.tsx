@@ -1,4 +1,4 @@
-export const navButtonClass = "px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-md transition-all duration-100 ease-in-out";
+export const navButtonClass = "px-2.5 py-2.5 lg:px-4 lg:py-2 text-gray-700 hover:bg-gray-200 rounded-lg lg:rounded-md transition-all duration-100 ease-in-out h-full flex items-center";
 export const navButtonClass2 = "p-2 text-gray-700 hover:bg-gray-200 rounded-full transition-all duration-100 ease-in-out";
 export const dividerClass = "border border-gray-100 w-[0px] h-[20px] transition-all duration-100 ease-in-out";
 export const dropdownClassLeft = "absolute left-0 top-full z-500 transition-all duration-100 ease-in-out";

@@ -26,7 +26,7 @@ export default function Breadcrumb({ breadcrumbItems }: { breadcrumbItems: Bread
         <div className="flex gap-2 w-full">
             {breadcrumbItems.map((item, index) => (
                 item.text !== '' && (
-                    <div className="flex gap-2 fontA4" key={index}>
+                    <div className="flex gap-2 fontA4 [&:not(:first-child,:nth-last-child(2),:last-child)]:hidden lg:[&:not(:first-child,:nth-last-child(2),:last-child)]:flex" key={index}>
                         <BreadcrumbItem
                             key={index}
                             link={item.link}

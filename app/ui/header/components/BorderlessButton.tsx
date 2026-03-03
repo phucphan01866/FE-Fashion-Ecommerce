@@ -8,12 +8,14 @@ export default function BorderlessButton({
     type =
     'link',
     href = '/',
-    items
+    items,
+    mainBtnBonusCss = '',
 }: {
     children: React.ReactNode,
     type?: 'link' | 'list',
     href?: string,
-    items?: { href: string, content: string }[]
+    items?: { href: string, content: string }[],
+    mainBtnBonusCss?: string,
 }) {
 
     const [expanded, setExpanded] = useState(false);
@@ -33,7 +35,7 @@ export default function BorderlessButton({
         );
     } else if (type === 'list') {
         return (
-            <div className={`relative ${navButtonClass}`} onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut}>
+            <div className={`relative ${navButtonClass} ${mainBtnBonusCss}`} onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut}>
                 <Link href={href} className={`list flex flex-row items-center gap-2`}>
                     <p>{children}</p>
                     <Image src="/icon/chevron_down.svg" alt="Arrow down" width={iconSize} height={iconSize} />

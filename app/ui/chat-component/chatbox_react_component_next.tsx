@@ -303,13 +303,14 @@ export default function ChatBox({
       // Xử lý response sau khi nhận
 
       const data = await res.json();
-      console.log("data : ", data);
       const botMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: "assistant",
         content: data.text,
         metadata: {},
       };
+      console.log("mgs: ", botMessage);
+      console.log("mgs list: ", [...messages, botMessage]);
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
       console.log("lỗi là: ", err);

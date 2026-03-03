@@ -3,6 +3,7 @@ import Banner from "./Banner";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useHome } from "@/context/HomeContext";
+import { bannerRatioCSS } from "./Banner";
 export default function BannerCarousel() {
     const { categoriesProducts } = useHome();
     const defaultBanner = {
@@ -28,7 +29,7 @@ export default function BannerCarousel() {
     const arrowOffset = "3.5rem"
     return (
         <div className="relative">
-            <div className={`relative h-[520px] w-[100%] overflow-hidden`}>
+            <div className={`relative h-auto w-[100%] overflow-hidden ${bannerRatioCSS}`}>
                 {bannerList.map((banner, index) => {
                     return (
                         <Banner

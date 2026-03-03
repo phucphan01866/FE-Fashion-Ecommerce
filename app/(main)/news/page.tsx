@@ -38,8 +38,8 @@ function Layout() {
                     ]} />
                 </div>
 
-                <h1 className='fontA1 font-bold! text-center m-auto relative uppercase w-[80%]! my-3'>Tin tức mới nhất</h1>
-                <div className='flex flex-col gap-4 bg-white p-4 rounded-xl w-[80%]!'>
+                <h1 className='fontA1 font-bold! text-center m-auto relative uppercase w-[80%] my-3'>Tin tức mới nhất</h1>
+                <div className='flex flex-col gap-4 bg-white p-4 rounded-xl w-full md:w-[95%] lg:w-[90%] xl:w-[80%]'>
                     {newsList && newsList.length > 0 ? newsList.map((newsData, index) => (
                         <NewsItem key={newsData.id} news={newsData} />
                     )) : <p className='text-center'>Chưa có tin tức nào.</p>}
@@ -67,20 +67,20 @@ export function NewsItem({ news }: { news: NewsPreviewData }) {
     }
     const url = `/news/${news.id}`;
     return (
-        <div className={`rounded-xl hover:bg-gray-100 transition-all relative grid grid-cols-[auto_1fr] gap-4 p-2 overflow-ellipsis`}>
-            <Link href={`${url}`} className="relative object-cover [user-drag:none] [-webkit-user-drag:none]"
-                style={{
-                    width: imgSize?.width + "px",
-                    height: imgSize?.height + "px"
-                }}
+        <div className={`rounded-xl transition-all duration-200 relative grid grid-cols-[25%_1fr] gap-4 p-2 overflow-ellipsis`}>
+            <Link href={`${url}`} className="aspect-[280/180] relative object-cover overflow-hidden rounded-md [user-drag:none] [-webkit-user-drag:none]"
+                // style={{
+                //     width: imgSize?.width + "px",
+                //     height: imgSize?.height + "px"
+                // }}
             >
                 <Image src={news.preview_image}
                     fill
                     alt=""
-                    className={`d-block object-cover rounded-md`}></Image>
+                    className={`d-block object-cover rounded-md hover:scale-101 transition-all duration-100`} />
             </Link>
             <div className={`grid gap-2 p-1 content-start font-medium`}>
-                <Link href={`${url}`} className={`[user-drag:none] [-webkit-user-drag:none]} fontA1 capitalize line-clamp-2 leading-normal!`} >
+                <Link href={`${url}`} className={`hover:text-black [user-drag:none] [-webkit-user-drag:none]} fontA1 capitalize line-clamp-2 leading-normal!`} >
                     {news.title}
                 </Link>
                 <p className='fontA5 font-light text-gray-500'>Xuất bản vào {new Date(news.created_at).toLocaleDateString('vi-VN', {
@@ -91,7 +91,7 @@ export function NewsItem({ news }: { news: NewsPreviewData }) {
                     year: 'numeric',
                 })}
                 </p>
-                <p className='fontA4 font-light line-clamp-3'>
+                <p className='fontA4 font-light hidden lg:line-clamp-2 xl:line-clamp-3'>
                     {news.preview_text}...
                 </p>
             </div>
