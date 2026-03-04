@@ -20,7 +20,7 @@ export default function ProductPage() {
     if (isLoading) return (<BasicLoadingSkeleton />);
     else return (
         <div className="container ">
-            <div className="w-full bg-white rounded-2xl px-16 py-8">
+            <div className="w-full bg-white rounded-2xl py-8">
                 <div className=" max-w-[1080px] flex flex-col justify-center gap-y-8 mx-auto">
                     <div className="flex flex-col gap-6">
                         <Breadcrumb breadcrumbItems={[
@@ -30,17 +30,17 @@ export default function ProductPage() {
                             { link: `/product?category_id=${categories?.find(cat => cat.name === product?.category_name)?.id}`, text: product?.category_name || '' },
                             { link: ``, text: product?.name || '' }
                         ]} />
-                        <div className="flex gap-x-16 justify-center-safe">
+                        <div className="flex flex-col md:flex-row gap-x-16 justify-center-safe">
                             <div className="">
                                 <ImageContent />
                             </div>
-                            <div className="py-1">
+                            <div className="py-0 lg:py-1 mt-6 lg:mt-0">
                                 <TextContent />
                             </div>
                         </div>
                     </div>
                     <div className="mx-auto w-[100%] flex flex-col gap-8">
-                        <div className="w-full px-8 py-8 rounded-xl flex flex-col gap-3 border-2 border-gray-100">
+                        <div className="w-full p-6 lg:p-8 rounded-xl flex flex-col gap-3 border-2 border-gray-100">
                             <p className="fontA2">Mô tả sản phẩm</p>
                             <Divider />
                             <p className="whitespace-pre-wrap">{product?.description}</p>

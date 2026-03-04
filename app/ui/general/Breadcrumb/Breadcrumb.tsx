@@ -23,7 +23,7 @@ export interface BreadcrumbItem {
 export default function Breadcrumb({ breadcrumbItems }: { breadcrumbItems: BreadcrumbItem[] }) {
     const maxIndex = breadcrumbItems.length - 1;
     return (
-        <div className="flex gap-2 w-full">
+        <div className="flex gap-2 w-auto">
             {breadcrumbItems.map((item, index) => (
                 item.text !== '' && (
                     <div className="flex gap-2 fontA4 [&:not(:first-child,:nth-last-child(2),:last-child)]:hidden lg:[&:not(:first-child,:nth-last-child(2),:last-child)]:flex" key={index}>

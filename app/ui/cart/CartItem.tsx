@@ -14,7 +14,7 @@ import { PreviewLineItem } from "@/service/promotion.service";
 
 export default function CartItem({ item, previewData, isRemovedItem = false }: { item: TypeCartItem, previewData?: PreviewLineItem, isRemovedItem?: boolean }) {
     const parsedSku: ParsedSku = parseSku(item.sku);
-    // console.log("Rendered CartItem:", item);
+    console.log("Rendered CartItem:", item);
     return (
         <div className={`grid gap-4 ${isRemovedItem ? "my-2 opacity-75" : "my-4"}`}>
             <div className="flex gap-4">
@@ -140,7 +140,7 @@ function QuantityArea({ id, currentQuantity }: { id: string, currentQuantity: nu
     };
 
     return (
-        <div className="flex items-center gap-2 rounded-md border border-gray-300">
+        <div className="flex items-center gap-0 lg:gap-2 rounded-md border border-gray-300">
             <button
                 type="button"
                 onClick={() => onChange(areaValue - 1)}
@@ -155,7 +155,7 @@ function QuantityArea({ id, currentQuantity }: { id: string, currentQuantity: nu
                 value={areaValue}
                 onChange={handleInputChange}
                 onBlur={handleBlur}
-                className="w-16 text-center outline-none font-medium"
+                className="w-8 lg:w-16 text-center outline-none font-medium"
                 style={{ appearance: "textfield" }}
             />
 

@@ -13,6 +13,7 @@ function NavButton({ direction, clickAble = true, handleClick }: { direction: "l
     return (
         <button onClick={() => handleClick()} className={`p-2 rounded-full bg-gray-100 
             hover:bg-gray-200 hover:outline-1 hover:outline-gray-200
+            border-2 border-gray-500/5
             disabled:bg-black disabled:outline-1 disabled:outline-black`} disabled={!clickAble}>
             <Image src={`/icon/chevron_down${!clickAble ? "_white" : ""}.svg`}
                 alt="prev"
@@ -27,7 +28,12 @@ function NavBtnArea({ size, currentIndex, handleClick }: { size: number, current
     const indexFromSize = size - 1;
 
     return (
-        <div className="flex justify-end gap-2">
+        <div className="absolute lg:relative
+         top-1/2 -translate-y-1/2 lg:top-0 lg:translate-y-0 
+         w-full lg:w-fit
+         justify-between lg:justify-end
+         px-4 lg:px-0
+         flex gap-2">
             <NavButton
                 handleClick={() => handleClick(currentIndex - 1)}
                 direction="left"
@@ -49,8 +55,10 @@ function ImageArea({ imgSrc, children }: { imgSrc: string, children?: React.Reac
     return (
         <div
             onClick={() => setIsPopupOpen(true)}
-            style={{ width: productImgWidth, height: productImgHeight }}
-            className="relative cursor-pointer overflow-hidden rounded-[24px] border-2 border-white outline-2 outline-gray-100">
+            // style={{ width: productImgWidth, height: productImgHeight }}
+            className="
+            w-full h-auto lg:w-[425px] lg:h-[425px]
+            relative cursor-pointer overflow-hidden rounded-[24px] border-2 border-white outline-2 outline-gray-100">
             {imgSrc && <Image
                 className="w-full h-full object-cover hover:scale-110 transition-all duration-200 ease-in-out"
                 src={imgSrc} alt="product image" width={productImgWidth} height={productImgHeight} />}
@@ -77,7 +85,7 @@ export default function ImageContent() {
 
 
     return (
-        <div className="flex flex-col gap-2 rounded-3xl">
+        <div className="flex flex-col lg:items-end-safe relative gap-2">
             <ImageArea imgSrc={selectedImage || ""} />
             <NavBtnArea
                 handleClick={(newIndex) => handleChangeImage(newIndex)}

@@ -51,7 +51,7 @@ function TitleSection() {
 function PriceSection() {
     const { product } = useProductPage();
     return (
-        <div className="flex items-baseline gap-4 mb-8">
+        <div className="flex items-baseline gap-4 mb-4 :mb-8">
             {product?.is_flash_sale && product.sale_percent > 0 && <span className="text-gray-400 line-through text-md">{Math.floor(product?.price).toLocaleString('vi-VN')} ₫</span>}
             <span className="text-2xl font-bold">
                 {(product?.is_flash_sale && product.sale_percent ? (product.price * (100 - product.sale_percent) / 100) : (Number(product?.price) || 0)).toLocaleString('vi-VN')} ₫</span>
@@ -63,7 +63,7 @@ function PriceSection() {
 function VariantSection() {
     const { variantList, sizeList } = useProductPage();
     return (
-        <div className="flex flex-col gap-3 w-fit hover:bg-gray-200 outline-4 outline-gray-50 border-2 border-white bg-gray-100 p-4 rounded-[2rem] mb-4 transition-all duration-5p0 ease-in-out">
+        <div className="flex flex-col gap-3 w-fit hover:bg-gray-200 outline-4 outline-gray-50 border-2 border-white bg-gray-100 p-1 lg:p-4 rounded-[2rem] mb-4 transition-all duration-5p0 ease-in-out">
             <BaseButtonArea label={sizeList.length > 0 && sizeList[0].toUpperCase() !== "KHÁC" ? "Màu sắc" : "Phân loại"}>
                 <ColorButtonArea colorList={variantList.filter(variant => variant.stock_qty > 0).map((variant) => ({ sku: variant.sku, title: variant.color_name, colorCode: variant.color_code }))} />
             </BaseButtonArea>
@@ -178,7 +178,7 @@ function ColorButtonArea({ colorList }: {
 function AddToCartSection() {
     const { user } = useAuth();
     return (
-        <div className="w-full flex items-center gap-4 mb-16">
+        <div className="w-full flex items-center gap-4 mb-0 lg:mb-16">
             <FormCart isCustomer={user?.role === 'customer'} />
             {user?.role === 'customer' && <FavoriteButton />}
         </div>
@@ -265,7 +265,7 @@ function FormCart({ isCustomer }: { isCustomer: boolean }) {
     }
     return (
         <form className="flex gap-4">
-            <div className="flex gap-2 bg-gray-100 p-1 rounded-full">
+            <div className="flex gap-2 bg-gray-100 p-1 rounded-full border-2 border-gray-500/25">
                 <ButtonCompact onClickFunction={decreaseQuantity}>-</ButtonCompact>
                 <input onChange={handleOnChange} type="number" value={quantity || ""} placeholder="1" max={999} className="text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-[2rem]" />
                 <ButtonCompact onClickFunction={increaseQuantity}>+</ButtonCompact>

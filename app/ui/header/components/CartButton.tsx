@@ -28,7 +28,7 @@ export default function CartButton({
             </Link>
             {items && items.length > 0 && <ItemDot />}
             {expanded && (
-                <div className={`${dropdownClassCenter} w-max`}>
+                <div className={`${dropdownClassCenter} w-max hidden lg:block`}>
                     <ul className={`${dropdownMenuClass2}`}>
                         {items && items.length > 0 && items.slice(0, 4).map((item) => {
                             return (

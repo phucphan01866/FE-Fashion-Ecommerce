@@ -5,13 +5,14 @@ import { Suspense } from "react";
 import Breadcrumb from "@/app/ui/general/Breadcrumb/Breadcrumb";
 import Product from "@/app/ui/general/ProductSection/Product";
 import { useHomeProductPage, HomeProductPageProvider } from "@/context/HomeProductContext";
-import { ControllableInputSelect, InputField, InputSelect, InputToggle } from "@/app/ui/general/Input/Input";
+import { baseInputBlockCSS, ControllableInputSelect, InputField, InputSelect, InputToggle } from "@/app/ui/general/Input/Input";
 import { usePublic } from "@/context/PublicContext";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useFavorite } from "@/context/FavoriteContext";
 import { SpinLoadingSkeleton, TextLoadingSkeleton } from "@/app/ui/general/skeletons/LoadingSkeleton";
 import { formatVND } from "@/app/ui/user/admin/promotion/PromotionForm";
+import { FaFilter } from "react-icons/fa6";
 
 export default function Page() {
     return (
@@ -77,7 +78,7 @@ const orderByOptions = [
 function FilterArea() {
     const { publicData } = usePublic();
     const { updateFilter, category_id, supplier_id, min_price, max_price, order, is_flash_sale } = useHomeProductPage();
-
+    const [isShowingFilter, setIsShowingFilter] = useState(false);
     // Đồng bộ giá trị input với URL khi mount hoặc khi filter thay đổi
     const [startPrice, setStartPrice] = useState<number>(() =>
         min_price ? min_price : 0
@@ -142,101 +143,107 @@ function FilterArea() {
     }
 
     return (
-        <div className="flex gap-2 flex-wrap">
-            {/* Category Filter */}
-            {(publicData && publicData?.categories?.length > 0) && (
-                <>
-                    <ControllableInputSelect
-                        onClick={(value) => updateFilter('category_id', value || null)}
-                        id="category-filter"
-                        label="Phân loại chính:"
+        <>
+            <button onClick={() => setIsShowingFilter(!isShowingFilter)} className={`${baseInputBlockCSS} !w-fit !flex !flex-row !items-center-safe !justify-center-safe !lg:hidden `}>
+                <span><FaFilter /></span>
+                <span>Lọc sản phẩm</span>
+            </button>
+            <div className={`${isShowingFilter ? 'flex' : 'hidden'} lg:flex gap-2 flex-wrap`}>
+                {/* Category Filter */}
+                {(publicData && publicData?.categories?.length > 0) && (
+                    <>
+                        <ControllableInputSelect
+                            onClick={(value) => updateFilter('category_id', value || null)}
+                            id="category-filter"
+                            label="Phân loại chính:"
+                            showDirection="horizontal"
+                            items={[
+                                { content: '', label: 'Tất cả' },
+                                ...publicData.categories.filter(cat => cat.parent_id === null).map((cat) => ({
+                                    content: cat.id,
+                                    label: cat.name,
+                                }))
+                            ]}
+                            currentValue={category_id !== '' ? (publicData.categories.find(cat => cat.id === category_id).parent_id || category_id) : ''}
+                        />
+                        <InputSelect
+                            disabled={!category_id || category_id === ''}
+                            onChange={(value) => updateFilter('category_id', value || null)}
+                            id="category-filter"
+                            label="Phân loại phụ:"
+                            showDirection="horizontal"
+                            items={makeChildCategoryItems(category_id)}
+                            defaultItem={category_id || ''}
+                        />
+                    </>
+                )}
+                {/* Brand Filter */}
+                {(publicData?.brands && publicData?.brands?.length > 0) && (
+                    <InputSelect
+                        onChange={(value) => updateFilter('supplier_id', value || null)}
+                        id="supplier-filter"
+                        label="Nhà phân phối :"
                         showDirection="horizontal"
                         items={[
                             { content: '', label: 'Tất cả' },
-                            ...publicData.categories.filter(cat => cat.parent_id === null).map((cat) => ({
-                                content: cat.id,
-                                label: cat.name,
+                            ...publicData.brands.map((brand) => ({
+                                content: String(brand.id),
+                                label: brand.name,
                             }))
                         ]}
-                        currentValue={category_id !== '' ? (publicData.categories.find(cat => cat.id === category_id).parent_id || category_id) : ''}
+                        defaultItem={supplier_id || ''}
                     />
-                    <InputSelect
-                        disabled={!category_id || category_id === ''}
-                        onChange={(value) => updateFilter('category_id', value || null)}
-                        id="category-filter"
-                        label="Phân loại phụ:"
-                        showDirection="horizontal"
-                        items={makeChildCategoryItems(category_id)}
-                        defaultItem={category_id || ''}
+                )}
+                <div className="basis-full" />
+                {/* Price Range */}
+                <div className="flex items-end gap-2">
+                    <InputField
+                        id="price-from"
+                        type="text"
+                        label="Giá từ :"
+                        placeholder="0 VNĐ"
+                        bonusCSS="!w-fit max-w-[95px]"
+                        value={startPrice.toLocaleString('vi-VN')}
+                        direction="horizontal"
+                        // onChange={(e) => setStartPrice(e.target.value)}
+                        onChange={(e) => formatVND(e.target.value, setStartPrice)}
+                        onKeyDown={handleStartPriceKeyDown}
+                        onBlur={() => applyPriceFilter('min_price', startPrice)}
+                        unit="VNĐ"
                     />
-                </>
-            )}
-            {/* Brand Filter */}
-            {(publicData?.brands && publicData?.brands?.length > 0) && (
-                <InputSelect
-                    onChange={(value) => updateFilter('supplier_id', value || null)}
-                    id="supplier-filter"
-                    label="Nhà phân phối :"
-                    showDirection="horizontal"
-                    items={[
-                        { content: '', label: 'Tất cả' },
-                        ...publicData.brands.map((brand) => ({
-                            content: String(brand.id),
-                            label: brand.name,
-                        }))
-                    ]}
-                    defaultItem={supplier_id || ''}
-                />
-            )}
-            <div className="basis-full" />
-            {/* Price Range */}
-            <div className="flex items-end gap-2">
-                <InputField
-                    id="price-from"
-                    type="text"
-                    label="Giá từ :"
-                    placeholder="0 VNĐ"
-                    bonusCSS="!w-fit max-w-[95px]"
-                    value={startPrice.toLocaleString('vi-VN')}
-                    direction="horizontal"
-                    // onChange={(e) => setStartPrice(e.target.value)}
-                    onChange={(e) => formatVND(e.target.value, setStartPrice)}
-                    onKeyDown={handleStartPriceKeyDown}
-                    onBlur={() => applyPriceFilter('min_price', startPrice)}
-                    unit="VNĐ"
-                />
-                {/* <span className="text-gray-500 pb-2">→</span>    */}
-                <InputField
-                    id="price-to"
-                    type="text"
-                    label="Tối đa :"
-                    placeholder="0 VNĐ"
-                    bonusCSS="!w-fit max-w-[95px]"
-                    value={endPrice.toLocaleString('vi-VN')}
-                    direction="horizontal"
-                    onChange={(e) => formatVND(e.target.value, setEndPrice)}
-                    onKeyDown={handleEndPriceKeyDown}
-                    onBlur={() => applyPriceFilter('max_price', endPrice)}
-                    unit="VNĐ"
-                />
-            </div>
+                    {/* <span className="text-gray-500 pb-2">→</span>    */}
+                    <InputField
+                        id="price-to"
+                        type="text"
+                        label="Tối đa :"
+                        placeholder="0 VNĐ"
+                        bonusCSS="!w-fit max-w-[95px]"
+                        value={endPrice.toLocaleString('vi-VN')}
+                        direction="horizontal"
+                        onChange={(e) => formatVND(e.target.value, setEndPrice)}
+                        onKeyDown={handleEndPriceKeyDown}
+                        onBlur={() => applyPriceFilter('max_price', endPrice)}
+                        unit="VNĐ"
+                    />
+                </div>
 
-            {/* Sort Filter */}
-            <InputSelect
-                id="orderBy-filter"
-                label="Sắp xếp theo :"
-                showDirection="horizontal"
-                items={orderByOptions}
-                onChange={(value) => updateFilter('order', value || 'desc')}
-            />
-            {/* Flash sale filter */}
-            <InputToggle
-                bonusCSS="!py-2 h-full min-h-[43px] !items-end"
-                id="price-toggle"
-                label="Đang khuyến mãi"
-                value={is_flash_sale}
-                onChange={toggleSetSaleProductFilter} />
-        </div>
+                {/* Sort Filter */}
+                <InputSelect
+                    id="orderBy-filter"
+                    label="Sắp xếp theo :"
+                    showDirection="horizontal"
+                    items={orderByOptions}
+                    onChange={(value) => updateFilter('order', value || 'desc')}
+                />
+                {/* Flash sale filter */}
+                <InputToggle
+                    bonusCSS="!py-2 h-full min-h-[43px] !items-end"
+                    id="price-toggle"
+                    label="Đang khuyến mãi"
+                    value={is_flash_sale}
+                    onChange={toggleSetSaleProductFilter} />
+            </div>
+        </>
     );
 }
 

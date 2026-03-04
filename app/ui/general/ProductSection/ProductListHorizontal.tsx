@@ -13,7 +13,7 @@ export default function HorizontalProductsList({ products, isLoading = false }: 
     const default_products_count = 5;
     return (
         <div
-            className={`gap-6 overflow-hidden flex select-none backdrop-opacity-50`}
+            className={`gap-3 md:gap-5 lg:gap-6 overflow-hidden flex select-none backdrop-opacity-50`}
             ref={dragScrollRef}
         >
             {!isLoading ? products.map((product) => {

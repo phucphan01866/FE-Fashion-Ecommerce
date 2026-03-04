@@ -21,7 +21,7 @@ export default function page({ }) {
         <div className="orderPage px-4 py-2 flex flex-col gap-4">
             <Title>HỒ SƠ TÀI KHOẢN</Title>
             <AccountInfoSection />
-            <PersonalInfoSection />
+            {/* <PersonalInfoSection /> */}
         </div>
     );
 }

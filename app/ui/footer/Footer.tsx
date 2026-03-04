@@ -6,38 +6,49 @@ import Image from "next/image";
 
 const iconSize = 24;
 
+// export default function Footer() {
+//     const { publicData } = usePublic();
+//     const parentCategories = publicData?.categories.filter(cat => !cat.parent_id);
+//     return (
+//         <footer className="footer w-full bg-black text-white">
+//             <div className="container flex justify-around px-8 py-12">
+//                 {parentCategories && parentCategories.length > 0 && parentCategories.slice(0, 4).map((parentCat) => {
+//                     const childCategories = publicData?.categories.filter(cat => cat.parent_id === parentCat.id);
+//                     if (!childCategories || childCategories.length === 0) return null;
+//                     else return (
+//                         <ParentBlock key={parentCat.id} title={parentCat.name} link={`/product?category_id=${encodeURI(parentCat.id)}`}>
+//                             <CategoryBlock categories={childCategories}></CategoryBlock>
+//                         </ParentBlock>
+//                     )
+//                 })}
+//             </div>
+//         </footer>
+
+//     );
+// }
+
 export default function Footer() {
     const { publicData } = usePublic();
-    // console.log("public data: ", publicData);
     const parentCategories = publicData?.categories.filter(cat => !cat.parent_id);
     return (
         <footer className="footer w-full bg-black text-white">
-            <div className="container flex justify-around px-8 py-12">
+            <div className="container grid  grid-cols-[auto_auto_auto_auto] justify-around px-8 py-12">
                 {parentCategories && parentCategories.length > 0 && parentCategories.slice(0, 4).map((parentCat) => {
                     const childCategories = publicData?.categories.filter(cat => cat.parent_id === parentCat.id);
                     if (!childCategories || childCategories.length === 0) return null;
                     else return (
-                        <ParentBlock key={parentCat.id} title={parentCat.name} link={`/product?category_id=${encodeURI(parentCat.id)}`}>
-                            <CategoryBlock categories={childCategories}></CategoryBlock>
-                        </ParentBlock>
+                        <BlockH2 key={parentCat.id}>
+                            <Link href={`/product?category_id=${encodeURI(parentCat.id)}`}>{parentCat.name}</Link>
+                        </BlockH2>
                     )
                 })}
-                {/* <ParentBlock title="Shirts">
-                    <CategoryBlock category="Shirts"></CategoryBlock>
-                </ParentBlock>
-                <ParentBlock title="Pants">
-                    <CategoryBlock category="Pants"></CategoryBlock>
-                </ParentBlock>
-                <ParentBlock title="Socks">
-                    <CategoryBlock category="Socks"></CategoryBlock>
-                </ParentBlock>
-                <ParentBlock title="Contact">
-                    <Block name="phone" iconSrc="phone-white.svg" text="+420 777 666 888"></Block>
-                    <Block name="email" iconSrc="mail-white.svg" text="john.doe@gmail.com"></Block>
-                </ParentBlock>
-                <ParentBlock title="Working Hours">
-                    <WorkingHours></WorkingHours>
-                </ParentBlock> */}
+                {parentCategories && parentCategories.length > 0 && parentCategories.slice(0, 4).map((parentCat) => {
+                    const childCategories = publicData?.categories.filter(cat => cat.parent_id === parentCat.id);
+                    if (!childCategories || childCategories.length === 0) return null;
+                    else return (
+                        <CategoryBlock key={parentCat.id} categories={childCategories}></CategoryBlock>
+                    )
+                })}
             </div>
         </footer>
 

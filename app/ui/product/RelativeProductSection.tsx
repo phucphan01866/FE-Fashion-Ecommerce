@@ -9,7 +9,7 @@ export default function RelativeProductSection({ relativeList }: { relativeList:
             <div className="">
                 <div className="grid grid-cols-[1fr_auto_1fr] items-baseline-last mb-3">
                     <div></div>
-                    <p className="fontA1 justify-self-center self-center w-full">Sản phẩm liên quan</p>
+                    <p className="text-3xl font-bold justify-self-center self-center w-full">Sản phẩm liên quan</p>
                     <Link className="w-fit ml-auto fontA5 hover:text-orange-600 transition-all duration-100" href={`/product?category_id=${encodeURI(relativeList[0].category_id)}`} >Xem thêm</Link>
                 </div>
                 <ProductListHorizontal products={relativeList}></ProductListHorizontal>
